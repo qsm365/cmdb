@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block mainbody %}
+<div class="well" style="margin-left: auto;margin-right: auto;width: 720px;">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+        {% if with_group %}
+        <span class="dropdown ">
+            <button class="btn btn-primary dropdown-toggle nopadding" type="button" data-toggle="dropdown">
+                Group Select
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="/cmdb/{{uri}}">All</a></li>
+            {% for g in grouplist %}
+                <li><a href="/cmdb/{{uri}}/group/{{g.id}}">{{g.name}}</a></li>
+            {% endfor %}
+            </ul>
+        </span>
+        {% endif %}
+        {% if with_new %}
+        <a class="btn btn-warning nopadding" href="/cmdb/{{uri}}/new">New</a>
+        {% endif %}
+        {% if not nosearch %}
+        <button id="btn_search" type="button" class="btn btn-success nopadding pull-right">Search</button>
+        <input id="input_search" type="text" class="form-control pull-right input-sm" style="width:100px;height:25px;"/>
+        {% endif %}
+        </div>
+        <div class="panel-body">
+            <table class="table">
+            <tbody>
+            {% for p in page %}
+            <tr class="onerow" id="{{p.id}}">
+                <td >{{p.name}}
+                <input type="hidden" id="url_{{p.id}}" value="{{p.url}}">
+                </td>
+                <td >{{p.ip}}{{p.time|date:'Y-m-d H:i'}}</td>
+                <td >
+                    {% for g in p.group.all %}
+                        <span class="badge pull-right">{{g.name}}</span>
+                    {% endfor%}
+                    {{p.status}}
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+        <div class="panel-footer" style="text-align:center;">
+        {% ifequal page_range|length 1 %}
+        1
+        {% else %}
+        {% if page.has_previous %}
+        <a class="btn btn-success pull-left nopadding" href="?page={{page.previous_page_number}}">&lt;prev</a>
+        {% else %}
+        <span class="btn pull-left nopadding"}}">&lt;prev</span>
+        {% endif %}
+        <span class="pull-center">
+            Page {{ page.number }} of {{ num_pages }}
+        </span>
+        {% if page.has_next %}
+        <a class="btn btn-success pull-right nopadding" href="?page={{page.next_page_number}}">next&gt;</a>
+        {% else %}
+        <span class="btn pull-right nopadding"}}">next&gt;</span>
+        {% endif %}
+        {% endifequal %}
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function(){
+    $(".onerow").click(function(){
+        window.location.href=$('#url_'+this.id).val();
+    });
+    $("#btn_search").click(function(){
+        window.location.href="?q="+$("#input_search").val();
+    });
+});
+</script>
+<style>
+.nopadding {
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+}
+#input_search {
+    wodth:200px;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>{{title}}</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+<script src="/javascripts/jquery.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+</head>
+<body style="background: #e8eef0;color: #444;min-width: 480px;">
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <span class="navbar-brand" href="#">CMDB</span>
+    </div>
+    <div>
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="/cmdb/">Home
+          <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/cmdb/host">Host</a></li>
+            <li><a href="/cmdb/config">Config</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="/cmdb/manage">Manage
+          <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/cmdb/group/type/host">Host Group Manage</a></li>
+            <li><a href="/cmdb/group/type/config">Config Group Manage</a></li>
+            <li><a href="/cmdb/group/relationship/add">Add Relationship</a></li>
+            <li><a href="/cmdb/group/relationship/remove">Remove Relationship</a></li>
+            <li><a href="/cmdb/group/parameter/add">Add Group Parameter</a></li>
+            <li><a href="/cmdb/group/parameter/remove">Remove Group Parameter</a></li>
+          </ul>
+        </li>
+        <li class="dropdown"><a href="/cmdb/report">Report</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Welcome: {{request.user.username}}</a></li>
+        <li><a href="/cmdb/logout">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+{% block mainbody %}
+
+{% endblock %}
+</body>
+</html>

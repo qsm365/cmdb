@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block mainbody %}
+<div style="margin-left: auto;margin-right: auto;width: 720px;">
+<table class="table">
+<tr>
+<td>
+<a type="button" class="btn btn-info btn-lg" style="height:200px;width:100%" href="/cmdb/group/type/host">Host Group Manage</a>
+</td>
+<td>
+<a type="button" class="btn btn-warning btn-lg" style="height:200px;width:100%" href="/cmdb/group/type/config">Config Group Manage</a>
+</td>
+</tr>
+<tr>
+<td>
+<a type="button" class="btn btn-success btn-lg" style="height:200px;width:100%" href="/cmdb/group/relationship/add">Add Relationship</a>
+</td>
+<td>
+<a type="button" class="btn btn-danger btn-lg" style="height:200px;width:100%" href="/cmdb/group/relationship/remove">Remove Relationship</a>
+</td>
+</tr>
+</table>
+</div>
+<style>
+.nopadding {
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+}
+</style>
+{% endblock %}

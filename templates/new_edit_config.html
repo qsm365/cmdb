@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block mainbody %}
+<div class="well" style="margin-left: auto;margin-right: auto;width: 720px;">
+    <div class="panel panel-primary">
+        <div class="panel-heading">{{title}}
+        <a id="id_finish" class="btn btn-danger pull-right nopadding" href="#">Finish</a>
+        </div>
+        <div class="panel-body">
+            <table class="table" id="step1">
+            <tbody>
+                <tr>
+                    <td>Config Name</td>
+                    <td id="id_td_name">
+                        <input id="id_name" name="group_name" placeholder="Config Name" type="text" class="form-control" value="{{config.name}}">
+                    
+                    </td>
+                </tr>
+                <tr>
+                    <td>Class Name</td>
+                    <td id="id_td_classname">
+                        <input id="id_classname" name="group_name" placeholder="Class Name" type="text" class="form-control" value="{{config.classname}}">
+                    
+                    </td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td id="id_td_description">
+                        <input id="id_description" name="group_name" placeholder="Description" type="text" class="form-control" value="{{config.description}}">
+                    
+                    </td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function(){
+$('#id_name').on('input',function(){
+    if($('#id_name').val().length>0){
+        $('#id_td_name').removeClass('has-error')
+        $('#id_td_name').addClass('has-success')
+    }else{
+        $('#id_td_name').removeClass('has-success')
+        $('#id_td_name').addClass('has-error')
+    }
+});
+$('#id_classname').on('input',function(){
+    if($('#id_classname').val().length>0){
+        $('#id_td_classname').removeClass('has-error')
+        $('#id_td_classname').addClass('has-success')
+    }else{
+        $('#id_td_classname').removeClass('has-success')
+        $('#id_td_classname').addClass('has-error')
+    }
+});
+$('#id_finish').click(function(){
+if($('#id_name').val().length>0 && $('#id_classname').val().length>0){
+    $.post( 
+        "/cmdb/config/{{config.id}}", 
+        { _method:"{{meth}}",name: $('#id_name').val(),description: $('#id_description').val(),classname: $('#id_classname').val(), csrfmiddlewaretoken: getCookie("csrftoken") },
+        function(data){window.location.href="/cmdb/config/{{config.id}}"}
+    );
+}else{
+    if($('#id_name').val().length<=0){
+        $('#id_td_name').addClass('has-error')
+    }
+    if($('#id_classname').val().length<=0){
+        $('#id_td_classname').addClass('has-error')
+    }
+}
+});
+});
+function getCookie(name) { var cookieValue = null;if (document.cookie && document.cookie != '') {var cookies = document.cookie.split(';');for (var i = 0; i < cookies.length; i++) {var cookie = jQuery.trim(cookies[i]);if (cookie.substring(0, name.length + 1) == (name + '=')) {cookieValue = decodeURIComponent(cookie.substring(name.length + 1));break;}}}return cookieValue;}
+</script>
+<style>
+.nopadding {
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+}
+</style>>
+{% endblock %}

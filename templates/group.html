@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block mainbody %}
+<div class="well" style="margin-left: auto;margin-right: auto;width: 720px;">
+    <div class="panel panel-primary">
+        <div class="panel-heading">{{title}}
+            <button type="button" class="btn btn-danger pull-right nopadding" id="btn_dele">Del</button>
+            <button type="button" class="btn btn-success pull-right nopadding" id="btn_edit">Edit</button>
+        </div>
+        <div class="panel-body">
+            <table class="table">
+            <tbody>
+            <tr class="info">
+                <td width="100">Group Name</td>
+                <td colspan='2'>{{group.name}}</td>
+            </tr>
+            <tr>
+                <td width="100">Group Type</td>
+                <td colspan='2'>{{group.type}}</td>
+            </tr>
+            </tbody>
+            </table>
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="panel-user-head"><span class="badge pull-right">{{members|length }}</span>Member Info</div>
+                <div class="panel-body" id="panel-user-body">
+                    <table class="table">
+                    <tbody>
+                    {% for m in members %}
+                    <tr class="info">
+                        <td class="col-sm-1">{{m.name}}</td>
+                        <td class="col-sm-1">{{m.classname}}{{m.ip}}</td>
+                        <td class="col-sm-1">{{m.description}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function(){
+    $("#btn_dele").click(function(){
+        if (confirm('Are you sure?')) {
+            $.post(
+                "/cmdb/group/{{group.id}}",
+                {_method: "delete",csrfmiddlewaretoken: getCookie("csrftoken")},
+                function(data){window.location.replace("/cmdb/group");}
+            )
+        };
+    });
+    $("#btn_edit").click(function(){
+        window.location.replace("/cmdb/group/edit/{{group.id}}");
+    });
+});
+
+function getCookie(name) { var cookieValue = null;if (document.cookie && document.cookie != '') {var cookies = document.cookie.split(';');for (var i = 0; i < cookies.length; i++) {var cookie = jQuery.trim(cookies[i]);if (cookie.substring(0, name.length + 1) == (name + '=')) {cookieValue = decodeURIComponent(cookie.substring(name.length + 1));break;}}}return cookieValue;}
+</script>
+<style>
+.nopadding {
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+}
+</style>
+{% endblock %}

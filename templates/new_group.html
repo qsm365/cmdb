@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block mainbody %}
+<div class="well" style="margin-left: auto;margin-right: auto;width: 720px;">
+    <div class="panel panel-primary">
+        <div class="panel-heading">{{title}}
+        <a id="id_next" class="btn btn-success pull-right nopadding" href="#">Next&gt;</a>
+        <a id="id_finish" class="btn btn-danger pull-right nopadding hide" href="#">Finish</a>
+        </div>
+        <div class="panel-body">
+            <table class="table" id="step1">
+            <tbody>
+                <tr>
+                    <td>name</td>
+                    <td id="id_td_name">
+                        <input id="id_name" name="group_name" placeholder="groupname" type="text" class="form-control">
+                    
+                    </td>
+                </tr>
+                <tr>
+                    <td>type</td>
+                    <td>
+                    <select id="id_type" name="group_type" class="form-control">
+                        {% for t in type %}
+                        <option>{{t}}</option>
+                        {% endfor %}
+                    </select>
+                    </td>
+                </tr>
+            </tbody>
+            </table>
+            <table  id="host-step2" width="100%" class="table hide">
+                <tr>
+                    <td width="100%" colspan="2">
+                    <input id="id_host_search" name="search" placeholder="search ip or hostname" type="text" class="form-control">
+                    </td>
+                </tr>
+                <tr align="center">
+                    <td width="50%"><h4>Search Result</h4>
+                    </td>
+                    <td width="50%"><h4>Group Member</h4>
+                    </td>
+                </tr>
+                <tr height="320">           
+                    <td width="50%">
+                    <select id="id_host_select" multiple="multiple" class="form-control" style="height:300px;">
+                    </select>
+                    </td>
+                    <td width="50%">
+                    <select id="id_host_target" multiple="multiple" class="form-control" style="height:300px;">
+                    </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <a class="btn btn-info" href="#" id="id_host_add">Add</a>
+                    </td>
+                    <td width="50%">
+                        <a class="btn btn-danger" href="#" id="id_host_remove">Remove</a>
+                    </td>
+                </tr>
+            </table>
+            <table  id="config-step2" width="100%" class="table hide">
+                <tr>
+                    <td width="100%" colspan="2">
+                    <input id="id_config_search" name="search" placeholder="search name or classname" type="text" class="form-control">
+                    </td>
+                </tr>
+                <tr align="center">
+                    <td width="50%"><h4>Search Result</h4>
+                    </td>
+                    <td width="50%"><h4>Group Member</h4>
+                    </td>
+                </tr>
+                <tr height="320">           
+                    <td width="50%">
+                    <select id="id_config_select" multiple="multiple" class="form-control" style="height:300px;">
+                    </select>
+                    </td>
+                    <td width="50%">
+                    <select id="id_config_target" multiple="multiple" class="form-control" style="height:300px;">
+                    </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="50%">
+                        <a class="btn btn-info" href="#" id="id_config_add">Add</a>
+                    </td>
+                    <td width="50%">
+                        <a class="btn btn-danger" href="#" id="id_config_remove">Remove</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function(){
+$('#id_name').on('input',function(){
+    if($('#id_name').val().length>0){
+        $('#id_td_name').removeClass('has-error')
+        $('#id_td_name').addClass('has-success')
+    }else{
+        $('#id_td_name').removeClass('has-success')
+        $('#id_td_name').addClass('has-error')
+    }
+});
+$('#id_host_search').on
+('input', function() 
+{
+$('#id_host_select').html("")
+if($('#id_host_search').val().length>=3){
+    $.getJSON("/cmdb/host/find?q="+$('#id_host_search').val(),function(result){
+        $.each(result, function(i, hostinfo){
+            //console.log("i:"+hostinfo.id+";field:"+hostinfo.ip)
+            $('#id_host_select').append($('<option>', 
+                {
+                    value: hostinfo.id,
+                    text: "["+hostinfo.name+"]"+hostinfo.ip
+                })
+            );
+        });
+    });
+}
+});
+
+$('#id_config_search').on
+('input', function() 
+{
+$('#id_config_select').html("")
+if($('#id_config_search').val().length>=3){
+    $.getJSON("/cmdb/config/find?q="+$('#id_config_search').val(),function(result){
+        $.each(result, function(i, configinfo){
+            $('#id_config_select').append($('<option>', 
+                {
+                    value: configinfo.id,
+                    text: "["+configinfo.name+"]"+configinfo.classname
+                })
+            );
+        });
+    });
+}
+});
+
+$('#id_host_add').click(function(){
+    $('#id_host_select :selected').each(function(i,selected){
+        $('#id_host_target').append($('<option>', 
+            {
+                value: $(selected).val(),
+                text: $(selected).text()
+            })
+        );
+    });
+});
+$('#id_host_remove').click(function(){
+    $('#id_host_target :selected').remove();
+});
+
+$('#id_config_add').click(function(){
+    $('#id_config_select :selected').each(function(i,selected){
+        $('#id_config_target').append($('<option>', 
+            {
+                value: $(selected).val(),
+                text: $(selected).text()
+            })
+        );
+    });
+});
+$('#id_config_remove').click(function(){
+    $('#id_config_target :selected').remove();
+});
+
+$('#id_next').click(function(){
+    if($('#id_name').val().length>0){
+        $("#id_next").addClass('hide');
+        $("#id_finish").removeClass('hide');
+        $("#step1").addClass('hide');
+        if($('#id_type').val()=='Host'){
+            $("#host-step2").removeClass('hide');
+        }else{
+            $("#config-step2").removeClass('hide');
+        }
+    }else{
+        $('#id_td_name').addClass('has-error')
+    }
+});
+$('#id_finish').click(function(){
+    if($('#id_type').val()=="Host"){
+        member_list="";
+        $('#id_host_target option').each(function(i,selected){
+            member_list=member_list+$(selected).val()+";"
+        });
+
+        $.post( 
+		"/cmdb/group", 
+		{ _method:"new",name: $('#id_name').val(),type: $('#id_type').val(),member: member_list, csrfmiddlewaretoken: getCookie("csrftoken") },
+		function(data){window.location.href="/cmdb/manage/"
+	});
+    }else{
+        member_list="";
+        $('#id_config_target option').each(function(i,selected){
+            member_list=member_list+$(selected).val()+";"
+        });
+        
+        $.post( 
+		"/cmdb/group", 
+		{ _method:"new",name: $('#id_name').val(),type: $('#id_type').val(),member: member_list, csrfmiddlewaretoken: getCookie("csrftoken") },
+		function(data){window.location.href="/cmdb/manage/"
+	});
+    }
+
+});
+});
+
+function getCookie(name) { var cookieValue = null;if (document.cookie && document.cookie != '') {var cookies = document.cookie.split(';');for (var i = 0; i < cookies.length; i++) {var cookie = jQuery.trim(cookies[i]);if (cookie.substring(0, name.length + 1) == (name + '=')) {cookieValue = decodeURIComponent(cookie.substring(name.length + 1));break;}}}return cookieValue;}
+</script>
+<style>
+.nopadding {
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+}
+</style>>
+{% endblock %}

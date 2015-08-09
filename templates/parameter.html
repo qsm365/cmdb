@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block mainbody %}
+<div class="well" style="margin-left: auto;margin-right: auto;width: 720px;">
+    {% ifequal function "add" %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+        Add
+        </div>
+        <div class="panel-body">
+            <table class="table" ><thead>
+            <th>Select Host Group:</th>
+            </thead><tbody><tr><td>
+            <select id="hostlist" class="form-control">
+                <option value="0"></option>
+            {% for h in hostlist %}
+                <option value="{{h.id}}">{{h.name}}</option>
+            {% endfor %}
+            </select>
+            </td></tr>
+            </tbody>
+            </table>
+            <table class="table" id="table-param">
+            <thead>
+                <th class="col-sm-1">key</th>
+                <th class="col-sm-1">value</th>
+                <th class="col-sm-1">
+                    <button type="button" class="btn btn-info nopadding pull-right" id="btn_para_add">Add</button>
+                </th>
+            </thead>
+            <tbody>
+            <tr>
+            <td class="col-sm-1"><input id="input_para_key" type="text"/></td>
+            <td class="col-sm-1"><input id="input_para_val" type="text"/></td>
+            <td class="col-sm-1"><button type="button" class="btn btn-danger nopadding pull-right btn_del">Del</button></td>
+            </tr>
+            </tbody>
+            </table>
+            <button type="button" class="btn btn-success nopadding pull-right btn_save">Save</button>
+        </div>
+    </div>
+    {% else %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+        Remove
+        </div>
+        <div class="panel-body">
+            <table class="table" ><thead>
+            <th>Select Host Group:</th>
+            </thead><tbody><tr><td>
+            <select id="hostlist2" class="form-control">
+            {% for h in hostlist %}
+                <option value="{{h.id}}">{{h.name}}</option>
+            {% endfor %}
+            </select>
+            </td></tr>
+            </tbody>
+            </table>
+            </table>
+            <table class="table" id="table-param2">
+            <thead>
+                <th class="col-sm-1">key</th>
+                <th class="col-sm-1">value</th>
+                <th class="col-sm-1"></th>
+            </thead>
+            <tbody>
+            </tbody>
+            </table>
+        </div>
+    </div>
+    {% endifequal %}
+</div>
+<script>
+$(document).ready(function(){
+    $("#hostlist2").on('change',function(){
+        gid=$('#hostlist2').val()
+        $("#table-param2 tbody:last").html('')
+        $.getJSON("/cmdb/parameter/find?groupid="+gid,function(result){
+            $.each(result, function(i, para){
+                $("#table-param2 tbody:last").append('<tr id="tr_'+para.id+'"><td class="col-sm-1"><input id="input_para_key" type="text" value="'+para.key+'"/></td><td class="col-sm-1"><input id="input_para_val" type="text" value="'+para.value+'"/></td><td class="col-sm-1"><button type="button" class="btn btn-danger nopadding pull-right btn_del" onClick="para_del(\''+para.id+'\',\''+para.key+'\')">Del</button></td></tr>');
+            });
+        });
+    });
+    $("#btn_para_add").click(function(){
+        $("#table-param tbody:last").append('<tr><td class="col-sm-1"><input id="input_para_key" type="text"/></td><td class="col-sm-1"><input id="input_para_val" type="text"/></td><td class="col-sm-1"><button type="button" class="btn btn-danger nopadding pull-right btn_del">Del</button></td></tr>');
+        $(".btn_del").click(function(){
+            $(this).parent().parent().remove()
+        });
+    });
+    $(".btn_del").click(function(){
+        $(this).parent().parent().remove()
+    });
+    $(".btn_save").click(function(){
+        gid=$('#hostlist').val()
+        var data=new Array()
+        $("#table-param >tbody tr").each(function(){
+            k=$(this).find('input').eq(0).val()
+            v=$(this).find('input').eq(1).val()
+            eval("d={'"+k+"':'"+v+"'}")
+            data.push(d)
+        });
+        var json=JSON.stringify(data)
+        $.post(
+            "/cmdb/group/parameter/add",
+            {csrfmiddlewaretoken: getCookie("csrftoken"),groupid:gid,data:json},
+            function(data){
+	   	window.location.href="/cmdb/manage"; 
+	    }
+        )
+    });
+});
+
+function para_del(id,key){
+    $.post(
+        "/cmdb/group/parameter/remove",
+        {csrfmiddlewaretoken: getCookie("csrftoken"),key:key,groupid:$('#hostlist2').val()},
+        function(data){
+            $("#tr_"+id).remove()
+        }
+    )
+}
+
+function getCookie(name) { var cookieValue = null;if (document.cookie && document.cookie != '') {var cookies = document.cookie.split(';');for (var i = 0; i < cookies.length; i++) {var cookie = jQuery.trim(cookies[i]);if (cookie.substring(0, name.length + 1) == (name + '=')) {cookieValue = decodeURIComponent(cookie.substring(name.length + 1));break;}}}return cookieValue;}
+</script>
+<style>
+.nopadding {
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+}
+#input_para_key {
+    width:  120px;
+}
+#input_para_val {
+    width:  120px;
+}
+.col-center-block {  
+    float: none;  
+    display: block;  
+    margin-left: auto;  
+    margin-right: auto;  
+}
+</style>
+{% endblock %}

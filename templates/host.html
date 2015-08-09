@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block mainbody %}
+<div class="well" style="margin-left: auto;margin-right: auto;width: 720px;">
+    <div class="panel panel-primary">
+        <div class="panel-heading">{{title}}
+            <button type="button" class="btn btn-danger pull-right nopadding" id="btn_dele">Del</button>
+        </div>
+        <div class="panel-body">
+            <table class="table">
+            <tbody>
+            <tr class="info">
+                <td width="100">Host Name</td>
+                <td colspan='2'>{{host.name}}</td>
+            </tr>
+            {% for i,ip in ip.items %}
+            <tr>
+                <td width="100">IP</td>
+                <td colspan='2'>{{ip.ipv4}}</td>
+            </tr>
+            {% endfor %}
+            <tr class="info">
+                <td width="100">Description</td>
+                <td><span id="span_desc">{{host.description}}</span><input id="input_desc" type="text" /></td>
+                <td align="right">
+                <button type="button" class="btn btn-success nopadding" id="btn_edit">Edit</button>
+                <button type="button" class="btn btn-info nopadding" id="btn_save">Save</button>
+                </td>
+            </tr>
+            <tr>
+                <td width="100">Group</td>
+                <td>
+                    {% for g in host.group.all %}
+                        <span class="badge">{{g.name}}</span>
+                    {% endfor%}
+                </td>
+                <td>
+                </td>
+            </tr>
+            </tbody>
+            </table>
+            
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="panel-hardware-head"><span class="badge pull-right">{{hardware.values.0.architecture}}</span>Hardware Info</div>
+                <div class="panel-body collapse" id="panel-hardware-body">
+                    <table class="table">
+                    <tbody>
+                    {% for h,hardware in hardware.items %}
+                    <tr>
+                        <td class="col-sm-1">Architecture</td>
+                        <td class="col-sm-2">{{hardware.architecture}}</td>
+                    </tr>
+                    <tr class="info">
+                        <td class="col-sm-1">CPU Type</td>
+                        <td class="col-sm-2">{{hardware.processortype}}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-1">CPU Numbers</td>
+                        <td class="col-sm-2">{{hardware.processorcount}}</td>
+                    </tr>
+                    <tr class="info">
+                        <td class="col-sm-1">Memory</td>
+                        <td class="col-sm-2">{{hardware.memorytotal}}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-1">Unique ID</td>
+                        <td class="col-sm-2">{{hardware.uniqueid}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="panel-os-head"><span class="badge pull-right">{{os.values.0.operatingsystem}}</span>OS Info</div>
+                <div class="panel-body collapse" id="panel-os-body">
+                    <table class="table">
+                    <tbody>
+                    {% for o,os in os.items %}
+                    <tr>
+                        <td class="col-sm-1">OS</td>
+                        <td class="col-sm-2">{{os.operatingsystem}}</td>
+                    </tr>
+                    <tr class="info">
+                        <td class="col-sm-1">OS Version</td>
+                        <td class="col-sm-2">{{os.operatingsystemrelease}}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-1">Kernel</td>
+                        <td class="col-sm-2">{{os.kernel}}</td>
+                    </tr>
+                    <tr class="info">
+                        <td class="col-sm-1">Kernel Version</td>
+                        <td class="col-sm-2">{{os.kernelversion}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="panel-user-head"><span class="badge pull-right">{{user|length }}</span>User Info</div>
+                <div class="panel-body collapse" id="panel-user-body">
+                    <table class="table">
+                    <thead>
+                        <th>name</th>
+                        <th>group</th>
+                        <th>locked</th>
+                    </thead>
+                    <tbody>
+                    {% for u,user in user.items %}
+                    <tr {% if not user.locked %}class="info"{% endif %}>
+                        <td class="col-sm-1">{{user.name}}</td>
+                        <td class="col-sm-1">{{user.group}}</td>
+                        <td class="col-sm-1">{{user.locked}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="panel-config-head"><span class="badge pull-right">{{config|length }}</span>Config Info</div>
+                <div class="panel-body collapse" id="panel-config-body">
+                    <table class="table">
+                    <thead>
+                        <th>name</th>
+                        <th>classname</th>
+                        <th>group</th>
+                    </thead>
+                    <tbody>
+                    {% for u,config in config.items %}
+                    <tr {% if not user.locked %}class="info"{% endif %}>
+                        <td class="col-sm-1">{{config.name}}</td>
+                        <td class="col-sm-1">{{config.classname}}</td>
+                        <td class="col-sm-1">
+				            {% for g in config.group.all %}
+                        	<span class="badge">{{g.name}}</span>
+                    		{% endfor%}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="panel-report-head"><span class="badge pull-right">{{ppreport.status }}</span>Last Config Report</div>
+                <div class="panel-body collapse" id="panel-report-body">
+                Reported at {{ppreport.time|date:'Y-m-d H:i'}}
+                <a class="btn btn-info nopadding pull-right" href="/cmdb/report/{{ppreport.id}}">Detail</a>
+                <table class="table">
+                <thead>
+                    <th>Level</th>
+                    <th>Message</th>
+                    <th>Time</th>
+                </thead>
+                <tbody>
+                    {% for log in ppreportlog %}
+                    <tr>
+                    <td>{{log.level}}</td>
+                    <td>{{log.message}}</td>
+                    <td>{{log.time|date:'Y-m-d H:i'}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+                </div>
+            </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="panel-parameter-head"><span class="badge pull-right">{{parameter|length }}</span>Parameter Info</div>
+                <div class="panel-body collapse" id="panel-parameter-body">
+                    <table class="table" id="table-param">
+                    <thead>
+                        <th class="col-sm-1">key</th>
+                        <th class="col-sm-1">value</th>
+                        <th class="col-sm-1">
+                            <button type="button" class="btn btn-info nopadding pull-right" id="btn_para_add">Add</button>
+                        </th>
+                    </thead>
+                    <tbody>
+                    {% for i,para in parameter.items %}
+                    <tr id="tr_{{para.id}}">
+                        <td class="col-sm-1"><input id="input_para_key" type="text" value="{{para.key}}"/></td>
+                        <td class="col-sm-1"><input id="input_para_val" type="text" value="{{para.value}}"/></td>
+                        <td class="col-sm-1">
+                            <button type="button" class="btn btn-danger nopadding pull-right btn_del" onClick="para_del({{para.id}})">Del</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+$(document).ready(function(){
+    $(".collapse").collapse('hide');
+    $("#btn_save").addClass('hide');
+    $("#input_desc").addClass('hide')
+    s1=0;
+    s2=0;
+    s3=0;
+    s4=0;
+    s5=0;
+    s6=0;
+    $("#panel-hardware-head").click(function(){
+        if(s1==0){
+            $("#panel-hardware-body").collapse('show');
+            s1=1}
+        else{
+            $("#panel-hardware-body").collapse('hide');
+            s1=0}
+    });
+    $("#panel-os-head").click(function(){
+        if(s2==0){
+            $("#panel-os-body").collapse('show');
+            s2=1}
+        else{
+            $("#panel-os-body").collapse('hide');
+            s2=0}
+    });
+    $("#panel-user-head").click(function(){
+        if(s3==0){
+            $("#panel-user-body").collapse('show');
+            s3=1}
+        else{
+            $("#panel-user-body").collapse('hide');
+            s3=0}
+    });
+    $("#panel-config-head").click(function(){
+        if(s4==0){
+            $("#panel-config-body").collapse('show');
+            s4=1}
+        else{
+            $("#panel-config-body").collapse('hide');
+            s4=0}
+    });
+    $("#panel-report-head").click(function(){
+        if(s5==0){
+            $("#panel-report-body").collapse('show');
+            s5=1}
+        else{
+            $("#panel-report-body").collapse('hide');
+            s5=0}
+    });
+    $("#panel-parameter-head").click(function(){
+        if(s6==0){
+            $("#panel-parameter-body").collapse('show');
+            s6=1}
+        else{
+            $("#panel-parameter-body").collapse('hide');
+            s6=0}
+    });
+    $("#btn_edit").click(function(){
+        $("#btn_edit").addClass('hide');
+        $("#btn_save").removeClass('hide');
+        $("#span_desc").addClass('hide');
+        $("#input_desc").val($("#span_desc").text());
+        $("#input_desc").removeClass('hide');
+    });
+    $("#btn_save").click(function(){
+        $.post(
+            "/cmdb/{{host.id}}", 
+            { _method: "edit_desc", desc: $("#input_desc").val(), csrfmiddlewaretoken: getCookie("csrftoken") },
+            function(data){
+                $("#btn_save").addClass('hide');
+                $("#btn_edit").removeClass('hide');
+                $("#input_desc").addClass('hide');
+                $("#span_desc").text($("#input_desc").val());
+                $("#span_desc").removeClass('hide');
+                }
+            );
+    });
+    $("#btn_dele").click(function(){
+        if (confirm('Are you sure?')) {
+            $.post(
+                "{{host.id}}",
+                {_method: "delete",csrfmiddlewaretoken: getCookie("csrftoken")},
+                function(data){window.location.href="/cmdb/host";}
+            )
+        };
+    });
+    $("#btn_para_add").click(function(){
+        $("#table-param tbody:last").append('<tr><td class="col-sm-1"><input id="input_para_key" type="text"/></td><td class="col-sm-1"><input id="input_para_val" type="text"/></td><td class="col-sm-1"><button type="button" class="btn btn-success nopadding pull-right btn_save">Save</button></td></tr>');
+        $(".btn_save").click(function(){
+            k=$(this).parent().parent().find('input').eq(0).val()
+            v=$(this).parent().parent().find('input').eq(1).val()
+            para_id=0
+            var button=$(this).parent()
+            $.post(
+                "{{host.id}}",
+                {_method: "addparam",csrfmiddlewaretoken: getCookie("csrftoken"),key:k,value:v},
+                function(data){
+                    para_id=data
+                    button.html("<button type='button' class='btn btn-danger nopadding pull-right btn_del' onClick='para_del("+para_id+")'>Del</button>")
+                    button.parent().attr("id","tr_"+para_id)
+                }
+            )
+        });
+    });
+});
+
+function para_del(id){
+    $.post(
+        "{{host.id}}",
+        {_method: "delparam",csrfmiddlewaretoken: getCookie("csrftoken"),pid:id},
+        function(data){
+            $("#tr_"+id).remove()
+        }
+    )
+}
+
+function getCookie(name) { var cookieValue = null;if (document.cookie && document.cookie != '') {var cookies = document.cookie.split(';');for (var i = 0; i < cookies.length; i++) {var cookie = jQuery.trim(cookies[i]);if (cookie.substring(0, name.length + 1) == (name + '=')) {cookieValue = decodeURIComponent(cookie.substring(name.length + 1));break;}}}return cookieValue;}
+</script>
+<style>
+.nopadding {
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+}
+#input_para_key {
+    width:  120px;
+}
+#input_para_val {
+    width:  120px;
+}
+</style>
+{% endblock %}

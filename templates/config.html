@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block mainbody %}
+<link rel="stylesheet" href="/stylesheets/prism.css">
+<script src="/javascripts/prism.js"></script>
+<div class="well" style="margin-left: auto;margin-right: auto;width: 720px;">
+    <div class="panel panel-primary">
+        <div class="panel-heading">{{title}}
+            <button type="button" class="btn btn-danger pull-right nopadding" id="btn_dele">Del</button>
+            <button type="button" class="btn btn-success pull-right nopadding" id="btn_edit">Edit</button>
+        </div>
+        <div class="panel-body">
+            <table class="table">
+            <tbody>
+            <tr class="info">
+                <td width="100">Config Name</td>
+                <td colspan='2'>{{config.name}}</td>
+            </tr>
+            <tr>
+                <td width="100">Class Name</td>
+                <td colspan='2'>{{config.classname}}</td>
+            </tr>
+            <tr class="info">
+                <td width="100">Description</td>
+                <td colspan='2'>{{config.description}}</td>
+            </tr>
+            <tr>
+                <td width="100">Group</td>
+                <td>
+                    {% for g in config.group.all %}
+                        <span class="badge">{{g.name}}</span>
+                    {% endfor%}
+                </td>
+                <td>
+                </td>
+            </tr>
+            </tbody>
+            </table>
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="panel-pp-head">
+                    <span class="badge pull-right">{{ppfile|length}}</span>
+                    pp File Info
+                </div>
+                <div class="panel-body collapse" id="panel-pp-body">
+                {% for file,content in ppfile.items %}
+                    <h5>{{file}}</h5>
+                    <pre class="language-ruby"><code class="language-ruby">{{content}}
+                    </code>
+                    </pre>
+                {% endfor %}
+                </div>
+            </div>
+            
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="panel-host-head">
+                    <span class="badge pull-right">{{host|length}}</span>
+                    Host with this Config
+                </div>
+                <div class="panel-body collapse" id="panel-host-body">
+                    <table class="table">
+                    <tbody>
+			{% for p in host %}
+			<tr>
+			<td class="col-sm-1">{{p.name}}</td>
+                	<td class="col-sm-1">{{p.ip}}</td>
+                	<td class="col-sm-1">
+                    		{% for g in p.group.all %}
+                        	<span class="badge pull-right">{{g.name}}</span>
+                    		{% endfor%}
+                	</td>
+			</tr>
+			{% endfor %}
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function(){
+    $("#btn_edit").click(function(){
+        window.location.href="/cmdb/config/edit/{{config.id}}";
+    });
+    $("#btn_dele").click(function(){
+        if (confirm('Are you sure?')) {
+            $.post(
+                "{{host.id}}",
+                {_method: "delete",csrfmiddlewaretoken: getCookie("csrftoken")},
+                function(data){window.location.href="/cmdb/config";}
+            )
+        };
+    });
+    s1=0
+    s2=0
+    $("#panel-pp-head").click(function(){
+        if(s1==0){
+            $("#panel-pp-body").collapse('show');
+            s1=1}
+        else{
+            $("#panel-pp-body").collapse('hide');
+            s1=0}
+    });
+    $("#panel-host-head").click(function(){
+        if(s1==0){
+            $("#panel-host-body").collapse('show');
+            s1=1}
+        else{
+            $("#panel-host-body").collapse('hide');
+            s1=0}
+    });
+});
+
+function getCookie(name) { var cookieValue = null;if (document.cookie && document.cookie != '') {var cookies = document.cookie.split(';');for (var i = 0; i < cookies.length; i++) {var cookie = jQuery.trim(cookies[i]);if (cookie.substring(0, name.length + 1) == (name + '=')) {cookieValue = decodeURIComponent(cookie.substring(name.length + 1));break;}}}return cookieValue;}
+</script>
+</script>
+<style>
+.nopadding {
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+}
+</style>
+{% endblock %}

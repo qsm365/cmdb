@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+{% load bootstrap_toolkit %}
+{% load url from future %}
+<html lang="en" xml:lang='en' xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+    <meta charset="utf-8">
+    <link href='/images/favicon.ico' rel='shortcut icon' />
+    <title>Puppet</title>
+    <meta name="description" content="">
+    <link rel="stylesheet" href="/stylesheets/bootstrap.css">
+    <link rel="stylesheet" href="/stylesheets/bootstrap-responsive.css">
+    <style type="text/css">
+        body {
+            padding-top: 60px;
+        }
+    </style>
+    <script src="/javascripts/jquery.min.js" type="text/javascript"></script>
+    <script src="/javascripts/bootstrap.min.js"></script>
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body style="background: #e8eef0;color: #444;min-width: 400px;">
+
+    {% if password_is_wrong %}
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <h4>Wrong</h4>username or password is wrong
+        </div>
+    {% endif %}
+    {% if imagecode_is_wrong %}
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <h4>Wrong</h4>image code is wrong
+        </div>
+    {% endif %}
+    <div class="well" style="margin-left: auto;margin-right: auto;width: 400px;">
+        <h1 style='color: #2C66A8;'>cmdb</h1>
+        <p> </p>
+        <form class="form-horizontal" action="" method="post">
+            {% csrf_token %}
+            {{ form|as_bootstrap:"horizontal" }}
+            <div style="margin-left: auto;margin-right: auto;width: 128px;">
+            <img onclick="this.setAttribute('src','captcha?nocache='+Math.random());" src="captcha" alt="Captcha"/>
+            </div>
+            <p class="form-actions">
+                <input type="submit" value="Login" class="btn btn-primary">
+            </p>
+            
+        </form>
+    </div>
+
+</body>
+</html>

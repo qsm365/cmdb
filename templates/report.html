@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block mainbody %}
+<div class="well" style="margin-left: auto;margin-right: auto;width: 720px;">
+    <div class="panel panel-primary">
+        <div class="panel-heading" id="panel-report-head">Report {{report.time|date:'Y-m-d H:i'}} for {{host}}</div>
+        <div class="panel-body" id="panel-report-body">
+
+        <table class='table'>
+        <tbody>
+        <tr>
+            <td colspan=2 class="info">
+                <h4>Changes:</h4>
+            </td>
+        </tr>
+        <tr>
+            <td>Total</td>
+            <td>{{metrics.changes.total|floatformat}}</td>
+        </tr>
+        <tr>
+            <td colspan=2 class="info">
+            <h4>Events:</h4>
+        </td>
+        </tr>
+        <tr>
+            <td>Failure</td>
+            <td>{{metrics.events.failure|floatformat}}</td>
+        </tr>
+        <tr>
+            <td>Success</td>
+            <td>{{metrics.events.success|floatformat}}</td>
+        </tr>
+        <tr>
+            <td>Total</td>
+            <td>{{metrics.events.total|floatformat}}</td>
+        </tr>
+        <tr>
+            <td colspan=2 class="info">
+                <h4>Resources:</h4>
+            </td>
+        </tr>
+        <tr>
+            <td>Changed</td>
+            <td>{{metrics.resources.changed|floatformat}}</td>
+        </tr>
+        <tr>
+            <td>Failed</td>
+            <td>{{metrics.resources.failed|floatformat}}</td>
+        </tr>
+        <tr>
+            <td>Failed To Restart</td>
+            <td>{{metrics.resources.failed_to_restart|floatformat}}</td>
+        </tr>
+        <tr>
+            <td>Out Of Sync</td>
+            <td>{{metrics.resources.out_of_sync|floatformat}}</td>
+        </tr>
+        <tr>
+            <td>Restarted</td>
+            <td>{{metrics.resources.restarted|floatformat}}</td>
+        </tr>
+        <tr>
+            <td>Scheduled</td>
+            <td>{{metrics.resources.scheduled|floatformat}}</td>
+        </tr>
+        <tr>
+            <td>Skipped</td>
+            <td>{{metrics.resources.skipped|floatformat}}</td>
+        </tr>
+        <tr>
+            <td>Total</td>
+            <td>{{metrics.resources.total|floatformat}}</td>
+        </tr>
+        <tr>
+            <td colspan=2 class="info">
+                <h4>Time:</h4>
+            </td>
+        </tr>
+        <tr>
+            <td>Config Retrieval</td>
+            <td>{{metrics.time.config_retrieval|floatformat:2}} seconds</td>
+        </tr>
+        <tr>
+            <td>Exec</td>
+            <td>{{metrics.time.exec|floatformat:2}} seconds</td>
+        </tr>
+        <tr>
+            <td>File</td>
+            <td>{{metrics.time.file|floatformat:2}} seconds</td>
+        </tr>
+        <tr>
+            <td>File Line</td>
+            <td>{{metrics.time.file_line|floatformat:2}} seconds</td>
+        </tr>
+        <tr>
+            <td>Filebucket</td>
+            <td>{{metrics.time.filebucket|floatformat:2}} seconds</td>
+        </tr>
+        <tr>
+            <td>Total</td>
+            <td>{{metrics.time.total|floatformat:2}} seconds</td>
+        </tr>
+        </tbody>
+        </table>
+
+        <h4>Logs:</h4>
+        <table class="table">
+        <thead>
+            <th>Level</th>
+            <th>Message</th>
+            <th>Time</th>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr>
+            <td>{{log.level}}</td>
+            <td>{{log.message}}</td>
+            <td>{{log.time|date:'Y-m-d H:i'}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+<script>
+
+</script>
+<style>
+.nopadding {
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+}
+#input_para_key {
+    width:  120px;
+}
+#input_para_val {
+    width:  120px;
+}
+</style>
+{% endblock %}

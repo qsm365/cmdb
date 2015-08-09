@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block mainbody %}
+<div class="well" style="margin-left: auto;margin-right: auto;width: 720px;">
+    {% ifequal function "add" %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+        Add
+        </div>
+        <div class="panel-body">
+        <table class="table">
+        <thead>
+        <tr>
+            <th width='40%'>Host</th>
+            <th wieth='20%'></th>
+            <th width='40%'>Config</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>
+            <select id="hostlist1" class="form-control">
+            {% for h in hostlist %}
+                <option value="{{h.id}}">{{h.name}}</option>
+            {% endfor %}
+            </select>
+        </td>
+        <td>
+            <button id="btn_add1" type="button" class="btn btn-danger col-center-block">Add</button>
+        </td>
+        <td>
+            <select id="configlist1" class="form-control">
+            {% for c in configlist %}
+                <option value="{{c.id}}">{{c.name}}</option>
+            {% endfor %}
+            </select>
+        </td>
+        </tr>
+        </tbody>
+        </table>
+        
+        
+        <table class="table">
+        <thead>
+        <tr>
+            <th width='40%'>Host</th>
+            <th width='20%'></th>
+            <th width='40%'>Config Group</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>
+            <select id="hostlist2" class="form-control">
+            {% for h in hostlist %}
+                <option value="{{h.id}}">{{h.name}}</option>
+            {% endfor %}
+            </select>
+        </td>
+        <td>
+            <button id="btn_add2" type="button" class="btn btn-danger col-center-block">Add</button>
+        </td>
+        <td>
+            <select id="configlist2" class="form-control">
+            {% for c in configgrouplist %}
+                <option value="{{c.id}}">{{c.name}}</option>
+            {% endfor %}
+            </select>
+        </td>
+        </tr>
+        </tbody>
+        </table>
+        
+        <table class="table">
+        <thead>
+        <tr>
+            <th width='40%'>Host Group</th>
+            <th width='20%'></th>
+            <th width='40%'>Config</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>
+            <select id="hostlist3" class="form-control">
+            {% for h in hostgrouplist %}
+                <option value="{{h.id}}">{{h.name}}</option>
+            {% endfor %}
+            </select>
+        </td>
+        <td>
+            <button id="btn_add3" type="button" class="btn btn-danger col-center-block">Add</button>
+        </td>
+        <td>
+            <select id="configlist3" class="form-control">
+            {% for c in configlist %}
+                <option value="{{c.id}}">{{c.name}}</option>
+            {% endfor %}
+            </select>
+        </td>
+        </tr>
+        </tbody>
+        </table>
+        
+        
+        <table class="table">
+        <thead>
+        <tr>
+            <th width='40%'>Host Group</th>
+            <th width='20%'></th>
+            <th width='40%'>Config Group</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>
+            <select id="hostlist4" class="form-control">
+            {% for h in hostgrouplist %}
+                <option value="{{h.id}}">{{h.name}}</option>
+            {% endfor %}
+            </select>
+        </td>
+        <td>
+            <button id="btn_add4" type="button" class="btn btn-danger col-center-block">Add</button>
+        </td>
+        <td>
+            <select id="configlist4" class="form-control">
+            {% for c in configgrouplist %}
+                <option value="{{c.id}}">{{c.name}}</option>
+            {% endfor %}
+            </select>
+        </td>
+        </tr>
+        </tbody>
+        </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+        Remove
+        </div>
+        <div class="panel-body">
+        <table class="table">
+        <thead>
+        <tr>
+            <th width='40%'>Host</th>
+            <th width='20%'></th>
+            <th width='40%'>Config</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>
+            <select id="hostlist1" class="form-control">
+            {% for h in hostlist %}
+                <option value="{{h.id}}">{{h.name}}</option>
+            {% endfor %}
+            </select>
+        </td>
+        <td>
+            <button id="btn_remove1" type="button" class="btn btn-danger col-center-block">Remove</button>
+        </td>
+        <td>
+            <select id="configlist1" class="form-control">
+            {% for c in configlist %}
+                <option value="{{c.id}}">{{c.name}}</option>
+            {% endfor %}
+            </select>
+        </td>
+        </tr>
+        </tbody>
+        </table>
+        
+        <table class="table">
+        <thead>
+        <tr>
+            <th width='40%'>Host</th>
+            <th width='20%'></th>
+            <th width='40%'>Config Group</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>
+            <select id="hostlist2" class="form-control">
+            {% for h in hostlist %}
+                <option value="{{h.id}}">{{h.name}}</option>
+            {% endfor %}
+            </select>
+        </td>
+        <td style="font-size:25px;">
+            <button id="btn_remove2" type="button" class="btn btn-danger col-center-block">Remove</button>
+        </td>
+        <td>
+            <select id="configlist2" class="form-control">
+            {% for c in configgrouplist %}
+                <option value="{{c.id}}">{{c.name}}</option>
+            {% endfor %}
+            </select>
+        </td>
+        </tr>
+        </tbody>
+        </table>
+        
+        <table class="table">
+        <thead>
+        <tr>
+            <th width='40%'>Host Group</th>
+            <th width='20%'></th>
+            <th width='40%'>Config</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>
+            <select id="hostlist3" class="form-control">
+            {% for h in hostgrouplist %}
+                <option value="{{h.id}}">{{h.name}}</option>
+            {% endfor %}
+            </select>
+        </td>
+        <td style="font-size:25px;">
+            <button id="btn_remove3" type="button" class="btn btn-danger col-center-block">Remove</button>
+        </td>
+        <td>
+            <select id="configlist3" class="form-control">
+            {% for c in configlist %}
+                <option value="{{c.id}}">{{c.name}}</option>
+            {% endfor %}
+            </select>
+        </td>
+        </tr>
+        </tbody>
+        </table>
+        
+        <table class="table">
+        <thead>
+        <tr>
+            <th width='40%'>Host Group</th>
+            <th width='20%'></th>
+            <th width='40%'>Config Group</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>
+            <select id="hostlist4" class="form-control">
+            {% for h in hostgrouplist %}
+                <option value="{{h.id}}">{{h.name}}</option>
+            {% endfor %}
+            </select>
+        </td>
+        <td style="font-size:25px;">
+            <button id="btn_remove4" type="button" class="btn btn-danger col-center-block">Remove</button>
+        </td>
+        <td>
+            <select id="configgrouplist4" class="form-control">
+            {% for c in configlist %}
+                <option value="{{c.id}}">{{c.name}}</option>
+            {% endfor %}
+            </select>
+        </td>
+        </tr>
+        </tbody>
+        </table>
+        
+        </div>
+    </div>
+    {% endifequal %}
+</div>
+<script>
+$(document).ready(function(){
+    $('#btn_add1').click(function(){
+        $.post(
+            "add/single2single",
+            {host:$('#hostlist1').val(),config:$('#configlist1').val(),csrfmiddlewaretoken: getCookie("csrftoken")},
+            function(data){
+                window.location.href="/cmdb/manage";
+            }
+        );
+    });
+    $('#btn_add2').click(function(){
+        $.post(
+            "add/group2single",
+            {host:$('#hostlist2').val(),config:$('#configlist2').val(),csrfmiddlewaretoken: getCookie("csrftoken")},
+            function(data){
+                window.location.href="/cmdb/manage";
+            }
+        );
+    });
+    $('#btn_add3').click(function(){
+        $.post(
+            "add/single2group",
+            {host:$('#hostlist3').val(),config:$('#configlist3').val(),csrfmiddlewaretoken: getCookie("csrftoken")},
+            function(data){
+                window.location.href="/cmdb/manage";
+            }
+        );
+    });
+    $('#btn_add4').click(function(){
+        $.post(
+            "add/group2group",
+            {host:$('#hostlist4').val(),config:$('#configlist4').val(),csrfmiddlewaretoken: getCookie("csrftoken")},
+            function(data){
+                window.location.href="/cmdb/manage";
+            }
+        );
+    });
+    
+    $('#btn_remove1').click(function(){
+        $.post(
+            "remove/single2single",
+            {host:$('#hostlist1').val(),config:$('#configlist1').val(),csrfmiddlewaretoken: getCookie("csrftoken")},
+            function(data){
+                window.location.href="/cmdb/manage";
+            }
+        );
+    });
+    $('#btn_remove2').click(function(){
+        $.post(
+            "remove/group2single",
+            {host:$('#hostlist2').val(),config:$('#configlist2').val(),csrfmiddlewaretoken: getCookie("csrftoken")},
+            function(data){
+                window.location.href="/cmdb/manage";
+            }
+        );
+    });
+    $('#btn_remove3').click(function(){
+        $.post(
+            "remove/single2group",
+            {host:$('#hostlist3').val(),config:$('#configlist3').val(),csrfmiddlewaretoken: getCookie("csrftoken")},
+            function(data){
+                window.location.href="/cmdb/manage";
+            }
+        );
+    });
+    $('#btn_remove4').click(function(){
+        $.post(
+            "remove/group2group",
+            {host:$('#hostlist4').val(),config:$('#configlist4').val(),csrfmiddlewaretoken: getCookie("csrftoken")},
+            function(data){
+                window.location.href="/cmdb/manage";
+            }
+        );
+    });
+    
+});
+
+function getCookie(name) { var cookieValue = null;if (document.cookie && document.cookie != '') {var cookies = document.cookie.split(';');for (var i = 0; i < cookies.length; i++) {var cookie = jQuery.trim(cookies[i]);if (cookie.substring(0, name.length + 1) == (name + '=')) {cookieValue = decodeURIComponent(cookie.substring(name.length + 1));break;}}}return cookieValue;}
+</script>
+<style>
+.nopadding {
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+}
+#input_search {
+    wodth:200px;
+}
+.col-center-block {  
+    float: none;  
+    display: block;  
+    margin-left: auto;  
+    margin-right: auto;  
+}
+</style>
+{% endblock %}
