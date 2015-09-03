@@ -55,7 +55,7 @@ def create(cont):
         res.resource_id=ppreport.id
         res.save()
 
-def list():
+def showAll():
     rep=PPREPORT.objects.order_by('-time').all()
     return rep
 

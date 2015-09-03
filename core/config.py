@@ -1,4 +1,4 @@
-from core.models import CONFIG,Host,Resource,Group
+from core.models import CONFIG,Resource,Group
 import os
 
 def create(name,description,classname):
@@ -14,7 +14,7 @@ def show(configid):
     if confs:
         return confs.first()
     
-def list():
+def showAll():
     re=CONFIG.objects.all()
     return re
 
@@ -70,7 +70,7 @@ def hostsWithConfig(configid):
     if confs:
         conf=confs.first()
         res=Resource.objects.filter(type="config",resource_id=conf.id).all()
-	re=[]
-	for r in res:
-           re.append(r.host)
-	return re
+    re=[]
+    for r in res:
+        re.append(r.host)
+    return re

@@ -8,7 +8,7 @@ def get(cert_name):
     if hosts:
         host=hosts.first()
         res1=Resource.objects.filter(host=host,type='config').all()
-	classes=[]
+        classes=[]
         if res1:
             for r in res1:
                 cs=CONFIG.objects.filter(id=r.resource_id)
@@ -17,7 +17,7 @@ def get(cert_name):
                     classes.append(str(c.classname))
                     
         res2=Resource.objects.filter(host=host,type='parameter').all()
-	parameters={}
+        parameters={}
         if res2:
             for r in res2:
                 ps=PARAMETER.objects.filter(id=r.resource_id)
@@ -28,9 +28,9 @@ def get(cert_name):
         result={}
         result['name']=str(cert_name)
         if classes:
-          result['classes']=classes
+            result['classes']=classes
         if parameters:
-          result['parameters']=parameters
+            result['parameters']=parameters
         return yaml.safe_dump(result,default_flow_style=False,explicit_start=True)
     else:
-	return "---\nclasses: []\n"
+        return "---\nclasses: []\n"

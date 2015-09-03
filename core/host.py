@@ -1,4 +1,4 @@
-from core.models import OS,HARDWARE,IP,Resource,Host,USER,Group,CONFIG,PARAMETER,PPREPORT,PPREPORTLOG
+from core.models import OS,HARDWARE,IP,Resource,Host,USER,Group,PPREPORT,PPREPORTLOG
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -28,7 +28,7 @@ def resolve(s):
     return re
 
 def exists(hostname,sip):
-    host=Host.objects.filter(name=hostname)
+    host=Host.objects.filter(name=hostname).order_by('-created_at')
     if host:
         res=Resource.objects.filter(host=host.first(),type="ip")
         if res:
@@ -166,9 +166,10 @@ def delete(hostid):
         reses=Resource.objects.filter(host=host)
         if reses:
             for res in reses:
-                t=eval(res.type.upper()).objects.filter(id=res.resource_id)
-                if t:
-                    t.first().delete()
+                if res.type!='config':
+                    t=eval(res.type.upper()).objects.filter(id=res.resource_id)
+                    if t:
+                        t.first().delete()
                 res.delete()
         host.first().delete()
 
@@ -197,7 +198,7 @@ def show(hostid):
                 re['ppreportlog']=ppreportlog
         return re
     
-def list():
+def showAll():
     re=Host.objects.all()
     return re
 

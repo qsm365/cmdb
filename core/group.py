@@ -1,4 +1,4 @@
-from core.models import Group,Host,CONFIG
+from core.models import Group
 
 def create(name,t):
     g=Group()
@@ -7,7 +7,7 @@ def create(name,t):
     g.save()
     return g.id
 
-def list():
+def showAll():
     re=Group.objects.all()
     return re
 

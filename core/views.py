@@ -41,7 +41,7 @@ def hosts(request,hostid=0,groupid=0):
             re=host.listByGroup(groupid)
             context['title']="Hosts in Group"
         else:
-            re=host.list()
+            re=host.showAll()
             context['title']="Host List"
         if re:
             page=Paginator(re,10)
@@ -110,7 +110,7 @@ def groups(request,groupid=0,grouptype=""):
                 re=group.listByType(grouptype)
                 context['title']=grouptype.capitalize()+" Groups Manage"
             else:
-                re=group.list()
+                re=group.showAll()
                 context['title']="Group List"
             if re:
                 page=Paginator(re,10)
@@ -178,7 +178,7 @@ def configs(request,configid=0,groupid=0):
                 re=config.listByGroup(groupid)
                 context['title']="Configs in Group"
             else:
-                re=config.list()
+                re=config.showAll()
                 context['title']="Config List"
             if re:
                 page=Paginator(re,10)
@@ -305,8 +305,8 @@ def relationship(request,function,functype=''):
         context={}
         context['title']="Host and Config Relationship Manage"
         context['function']=function
-	context['hostlist']=host.list()
-        context['configlist']=config.list()
+        context['hostlist']=host.showAll()
+        context['configlist']=config.showAll()
         context['hostgrouplist']=group.listByType("Host")
         context['configgrouplist']=group.listByType("CONFIG")
         return render(request,'relationship.html',context)
@@ -354,7 +354,7 @@ def reports(request,report_id=0,groupid=0):
             re=report.listByGroup(groupid)
             context['title']="Reports in Group"
         else:
-            re=report.list()
+            re=report.showAll()
             context['title']="Report List"
         if re:
             page=Paginator(re,10)
@@ -366,7 +366,7 @@ def reports(request,report_id=0,groupid=0):
             for p in context['page']:
                 p.setHost(report.getHost(p))
                 p.setUrl("/cmdb/report/"+str(p.id))
-        context['grouplist']=host.list()
+        context['grouplist']=host.showAll()
         context['uri']="report"
         context['with_new']=False
         context['with_group']=True
