@@ -1,4 +1,5 @@
-from core.models import Group,Host,CONFIG
+from core.models import Group,Host
+from puppet.models import CONFIG
 
 def create(name,t):
     g=Group()

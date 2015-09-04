@@ -1,4 +1,5 @@
-from core.models import PARAMETER,Resource,Host,Group
+from core.models import Resource,Host,Group
+from puppet.models import PARAMETER
 
 def createByHost(hostid,key,value):
     hosts=Host.objects.filter(id=hostid)

@@ -1,5 +1,6 @@
 import yaml
-from models import Host,Resource,CONFIG,PARAMETER
+from core.models import Host,Resource
+from puppet.models import CONFIG,PARAMETER
 
 
 def get(cert_name):
@@ -7,7 +8,7 @@ def get(cert_name):
     hosts=Host.objects.filter(name__iexact=hostname)
     if hosts:
         host=hosts.first()
-        res1=Resource.objects.filter(host=host,type='config').all()
+        res1=Resource.objects.filter(host=host,type='puppet').all()
         classes=[]
         if res1:
             for r in res1:

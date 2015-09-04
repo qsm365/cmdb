@@ -1,5 +1,5 @@
 """
-WSGI config for cmdb project.
+WSGI puppet for cmdb project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

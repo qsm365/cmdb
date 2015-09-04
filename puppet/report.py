@@ -1,4 +1,5 @@
-from core.models import Host,Resource,PPREPORT,PPMETRICS,PPREPORTLOG,IP
+from core.models import Host,Resource,IP
+from puppet.models import PPREPORT,PPMETRICS,PPREPORTLOG
 import yaml
 import dateutil.parser
 

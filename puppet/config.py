@@ -1,4 +1,5 @@
-from core.models import CONFIG,Resource,Group
+from core.models import Resource,Group
+from puppet.models import CONFIG
 import os
 
 def create(name,description,classname):
@@ -69,7 +70,7 @@ def hostsWithConfig(configid):
     confs=CONFIG.objects.filter(id=configid)
     if confs:
         conf=confs.first()
-        res=Resource.objects.filter(type="config",resource_id=conf.id).all()
+        res=Resource.objects.filter(type="puppet",resource_id=conf.id).all()
     re=[]
     for r in res:
         re.append(r.host)
