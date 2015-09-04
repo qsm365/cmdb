@@ -1,4 +1,4 @@
-from core.models import Group
+from core.models import Group,Host,CONFIG
 
 def create(name,t):
     g=Group()

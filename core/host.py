@@ -1,4 +1,4 @@
-from core.models import OS,HARDWARE,IP,Resource,Host,USER,Group,PPREPORT,PPREPORTLOG
+from core.models import OS,HARDWARE,IP,Resource,Host,USER,Group,PPREPORT,PPREPORTLOG,CONFIG
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')

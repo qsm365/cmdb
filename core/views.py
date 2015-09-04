@@ -4,7 +4,6 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from PIL import Image, ImageDraw, ImageFont
 import cStringIO, string, os, random
-from forms import LoginForm
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from django.shortcuts import render
@@ -484,25 +483,21 @@ def parameter_find_json(request):
 
 def login(request):
     if request.method == 'GET':
-        form = LoginForm()
-        return render_to_response('login.html', RequestContext(request, {'form': form,}))
+        return render_to_response('login.html', RequestContext(request))
     else:
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = request.POST.get('username', '')
-            password = request.POST.get('password', '')
-            imagecode= request.POST.get('imagecode','')
-            if imagecode.lower()!=request.session['captcha']:
-                return render_to_response('login.html', RequestContext(request, {'form': form,'imagecode_is_wrong':True}))
-            
-            user = auth.authenticate(username=username, password=password)
-            if user is not None and user.is_active:
-                auth.login(request, user)
-                return HttpResponseRedirect("/cmdb")
-            else:
-                return render_to_response('login.html', RequestContext(request, {'form': form,'password_is_wrong':True}))
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
+        imagecode= request.POST.get('imagecode','')
+        if imagecode.lower()!=request.session['captcha']:
+            return render_to_response('login.html', RequestContext(request, {'imagecode_is_wrong':True}))
+        
+        user = auth.authenticate(username=username, password=password)
+        if user is not None and user.is_active:
+            auth.login(request, user)
+            return HttpResponseRedirect("/cmdb")
         else:
-            return render_to_response('login.html', RequestContext(request, {'form': form,}))
+            return render_to_response('login.html', RequestContext(request, {'password_is_wrong':True}))
+    
 
 @login_required
 def logout(request):
