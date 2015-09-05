@@ -60,7 +60,7 @@ def showAll():
     rep=PPREPORT.objects.order_by('-time').all()
     return rep
 
-def listByGroup(hostid):
+def listByHost(hostid):
     hosts=Host.objects.filter(id=hostid)
     if hosts:
         re=[]

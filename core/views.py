@@ -157,12 +157,6 @@ def groups(request,groupid=0,grouptype=""):
 
 
 @login_required
-def manage(request):
-    context={}
-    context['title']="Manage"
-    return render(request,'manage.html',context)
-
-@login_required
 def relationship(request,function,functype=''):
     if request.method=="POST":
         if function=='add':

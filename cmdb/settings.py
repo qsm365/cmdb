@@ -38,7 +38,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
-    'puppet'
+    'puppet',
+    'docker',
 )
 
 MIDDLEWARE_CLASSES = (

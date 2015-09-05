@@ -17,26 +17,35 @@
     <div>
       <ul class="nav navbar-nav">
         <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="/cmdb/">Home
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Host
           <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="/cmdb/host">Host</a></li>
-            <li><a href="/cmdb/config">Config</a></li>
-          </ul>
-        </li>
-        <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="/cmdb/manage">Manage
-          <span class="caret"></span></a>
-          <ul class="dropdown-menu">
             <li><a href="/cmdb/group/type/host">Host Group Manage</a></li>
-            <li><a href="/cmdb/group/type/config">Config Group Manage</a></li>
             <li><a href="/cmdb/group/relationship/add">Add Relationship</a></li>
             <li><a href="/cmdb/group/relationship/remove">Remove Relationship</a></li>
             <li><a href="/cmdb/group/parameter/add">Add Group Parameter</a></li>
             <li><a href="/cmdb/group/parameter/remove">Remove Group Parameter</a></li>
           </ul>
         </li>
-        <li class="dropdown"><a href="/cmdb/report">Report</a></li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Puppet
+          <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/cmdb/config">Config</a></li>
+            <li><a href="/cmdb/group/type/config">Config Group Manage</a></li>
+            <li><a href="/cmdb/report">Report</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Docker
+          <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/cmdb/application">Application</a></li>
+            <li><a href="/cmdb/application">Image</a></li>
+          </ul>
+        </li>
+        
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#">Welcome: {{request.user.username}}</a></li>

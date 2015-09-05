@@ -17,6 +17,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from core.views import *
 from puppet.views import *
+from docker.views import *
 
 urlpatterns = [
     
@@ -30,6 +31,7 @@ urlpatterns = [
     
     url('^cmdb/host[/]?(\d{1,11})?$',hosts),
     url('^cmdb/host/group/(?P<groupid>\d{1,11})?$',hosts),
+    url('^cmdb/host/find$',host_find_json),
     
     url('^cmdb/group[/]?(\d{1,11})?$',groups),
     url('^cmdb/group/type/(?P<grouptype>host|config)?$',groups),
@@ -43,9 +45,8 @@ urlpatterns = [
     url('^cmdb/config/group/(?P<groupid>\d{1,11})?$',configs),
     url('^cmdb/config/new$',new_config),
     url('^cmdb/config/edit/(\d{1,11})$',edit_config),
-    
     url('^cmdb/config/find$',config_find_json),
-    url('^cmdb/host/find$',host_find_json),
+    
     url('^cmdb/parameter/find$',parameter_find_json),
     
     url('^cmdb/report[/]?(\d{1,11})?$',reports),
@@ -53,7 +54,6 @@ urlpatterns = [
     
     url('^cmdb/enc$',externalNodeClassifier),
     url('^cmdb/importreport$',importReport),
-    
-    url('^cmdb/manage[/]?$',manage),
-    
+        
+    url('^cmdb/application',application)
 ]
