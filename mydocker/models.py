@@ -9,10 +9,13 @@ class APPLICATION(models.Model):
     image=models.CharField(max_length=100)
     created=models.DateTimeField()
     status=models.CharField(max_length=30)
-    createby=models.TextField()
+    engineip=models.CharField(max_length=30)
+    engineport=models.CharField(max_length=10)
     url=""
     def __str__(self):
         return self.name
+    def setUrl(self,url):
+        self.url=url
 
 class IMAGE(models.Model):
     imageid=models.CharField(max_length=100)

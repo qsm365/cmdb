@@ -19,6 +19,11 @@ def showAll():
     re=CONFIG.objects.all()
     return re
 
+def get(configid):
+    confs=CONFIG.objects.filter(id=configid)
+    if confs:
+        return confs.first()
+
 def search(q):
     conf=CONFIG.objects.filter(name__icontains=q) | CONFIG.objects.filter(classname__icontains=q)
     re=[]

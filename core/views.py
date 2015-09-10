@@ -56,7 +56,7 @@ def hosts(request,hostid=0,groupid=0):
         context['grouplist']=group.listByType('Host')
         context['uri']='host'
         context['with_group']=True
-        context['with_new']=True
+        context['with_new']=False
         return render(request, 'list.html',context)
     else:
         if request.method=='POST':
@@ -155,7 +155,6 @@ def groups(request,groupid=0,grouptype=""):
             else:
                 return HttpResponseRedirect("/cmdb/group")
 
-
 @login_required
 def relationship(request,function,functype=''):
     if request.method=="POST":
@@ -245,8 +244,7 @@ def relationship(request,function,functype=''):
         context['hostgrouplist']=group.listByType("Host")
         context['configgrouplist']=group.listByType("CONFIG")
         return render(request,'relationship.html',context)
-
-    
+   
 @login_required
 def home(request):
     context={}
@@ -309,7 +307,6 @@ def login(request):
         else:
             return render_to_response('login.html', RequestContext(request, {'password_is_wrong':True}))
     
-
 @login_required
 def logout(request):
     auth.logout(request)

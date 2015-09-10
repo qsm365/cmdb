@@ -1,4 +1,4 @@
-from docker.models import IMAGE
+from mydocker.models import IMAGE
 from core.models import Host,Resource
 
 def create(repository,tag):

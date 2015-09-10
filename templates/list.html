@@ -34,12 +34,14 @@
                 <td >{{p.name}}
                 <input type="hidden" id="url_{{p.id}}" value="{{p.url}}">
                 </td>
-                <td >{{p.ip}}{{p.time|date:'Y-m-d H:i'}}</td>
+                <td >{{p.ip}}{{p.engineip}}{{p.time|date:'Y-m-d H:i'}}</td>
                 <td >
                     {% for g in p.group.all %}
                         <span class="badge pull-right">{{g.name}}</span>
                     {% endfor%}
-                    {{p.status}}
+                    {% if p.status %}
+                        <span class="badge pull-right">{{p.status}}</span>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}

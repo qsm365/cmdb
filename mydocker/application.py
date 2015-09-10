@@ -1,13 +1,40 @@
-from docker.models import APPLICATION
+from mydocker.models import APPLICATION
 from core.models import Host,Resource
+import dockerclient
 
-def create(name,description,createby):
+def create_new():
     return
+
+def create_detect(host_id,engine_ip,engine_port,container_id,app_name,app_desc):
+    containerinfo=dockerclient.detect(engine_ip, engine_port, container_id)
+    print containerinfo
+    if containerinfo:
+        app=APPLICATION()
+        app.name=app_name
+        app.desc=app_desc
+        app.containerid=container_id
+        app.containername=containerinfo['container_name']
+        app.image=containerinfo['image']
+        app.created=containerinfo['created']
+        app.status=containerinfo['status']
+        app.engineip=engine_ip
+        app.engineport=engine_port
+        app.save()
+        print "1"
+        hosts=Host.objects.filter(id=host_id)
+        if hosts:
+            host=hosts.first()
+            res=Resource()
+            res.type="application"
+            res.host=host
+            res.resource_id=app.id
+            res.save()
+            print "2"
 
 def show(appid):
     app=APPLICATION.objects.filter(id=appid)
     if app:
-        return app
+        return app.first()
 
 def showAll():
     re=APPLICATION.objects.all()

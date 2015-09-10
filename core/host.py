@@ -1,5 +1,6 @@
 from core.models import OS,HARDWARE,IP,Resource,Host,USER,Group
-from puppet.models import PPREPORT,PPREPORTLOG,CONFIG
+from puppet.models import PPREPORT,PPREPORTLOG,CONFIG,PARAMETER
+from mydocker.models import APPLICATION
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -160,7 +161,6 @@ def update(hostid,s,sip):
                 res.host=host
                 res.save()
             
-
 def delete(hostid):
     host=Host.objects.filter(id=hostid)
     if host:

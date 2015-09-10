@@ -103,9 +103,11 @@
                 <div class="panel-body collapse" id="panel-user-body">
                     <table class="table">
                     <thead>
+                    <tr>
                         <th>name</th>
                         <th>group</th>
                         <th>locked</th>
+                    </tr>
                     </thead>
                     <tbody>
                     {% for u,user in user.items %}
@@ -124,9 +126,11 @@
                 <div class="panel-body collapse" id="panel-config-body">
                     <table class="table">
                     <thead>
+                    <tr>
                         <th>name</th>
                         <th>classname</th>
                         <th>group</th>
+                    </tr>
                     </thead>
                     <tbody>
                     {% for u,config in config.items %}
@@ -145,15 +149,42 @@
                 </div>
             </div>
             <div class="panel panel-primary">
+                <div class="panel-heading" id="panel-application-head"><span class="badge pull-right">{{application|length }}</span>Application Info</div>
+                <div class="panel-body collapse" id="panel-application-body">
+                    <table class="table">
+                    <thead>
+                    <tr>
+                        <th>name</th>
+                        <th>containername</th>
+                        <th>created</th>
+                        <th>status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for u,app in application.items %}
+                    <tr class="info">
+                        <td class="col-sm-1">{{app.name}}</td>
+                        <td class="col-sm-1">{{app.containername}}</td>
+                        <td class="col-sm-1">{{app.created|date:'Y-m-d H:i'}}</td>
+                        <td class="col-sm-1">{{app.status}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel panel-primary">
                 <div class="panel-heading" id="panel-report-head"><span class="badge pull-right">{{ppreport.status }}</span>Last Config Report</div>
                 <div class="panel-body collapse" id="panel-report-body">
                 Reported at {{ppreport.time|date:'Y-m-d H:i'}}
                 <a class="btn btn-info nopadding pull-right" href="/cmdb/report/{{ppreport.id}}">Detail</a>
                 <table class="table">
                 <thead>
+                <tr>
                     <th>Level</th>
                     <th>Message</th>
                     <th>Time</th>
+                <tr>
                 </thead>
                 <tbody>
                     {% for log in ppreportlog %}
@@ -172,11 +203,13 @@
                 <div class="panel-body collapse" id="panel-parameter-body">
                     <table class="table" id="table-param">
                     <thead>
+                    <tr>
                         <th class="col-sm-1">key</th>
                         <th class="col-sm-1">value</th>
                         <th class="col-sm-1">
                             <button type="button" class="btn btn-info nopadding pull-right" id="btn_para_add">Add</button>
                         </th>
+                    </tr>
                     </thead>
                     <tbody>
                     {% for i,para in parameter.items %}
@@ -238,6 +271,14 @@ $(document).ready(function(){
             s4=1}
         else{
             $("#panel-config-body").collapse('hide');
+            s4=0}
+    });
+    $("#panel-application-head").click(function(){
+        if(s4==0){
+            $("#panel-application-body").collapse('show');
+            s4=1}
+        else{
+            $("#panel-application-body").collapse('hide');
             s4=0}
     });
     $("#panel-report-head").click(function(){

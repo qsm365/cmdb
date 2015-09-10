@@ -17,7 +17,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from core.views import *
 from puppet.views import *
-from docker.views import *
+from mydocker.views import *
 
 urlpatterns = [
     
@@ -54,6 +54,15 @@ urlpatterns = [
     
     url('^cmdb/enc$',externalNodeClassifier),
     url('^cmdb/importreport$',importReport),
-        
-    url('^cmdb/application',application)
+    
+    url('^cmdb/application[/]?(\d{1,11})?$',applications),
+    url('^cmdb/application/new/create$',create_application),
+    url('^cmdb/application/new/detect$',detect_application),
+    url('^cmdb/application/edit/(\d{1,11})$',edit_application),
+    url('^cmdb/application/ping$',ping_docker),
+    url('^cmdb/application/containers',list_containers),
+    
+    url('^cmdb/image$',images),
+    url('^cmdb/image/new$',new_image),
+    url('^cmdb/image/edit/(\d{1,11})$',edit_image),
 ]
