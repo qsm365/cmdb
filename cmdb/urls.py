@@ -21,7 +21,7 @@ from mydocker.views import *
 
 urlpatterns = [
     
-    url('^cmdb$',home),
+    url('^cmdb[/]?$',home),
     url('^cmdb/login[/]?$',login),
     url('^cmdb/logout[/]?$',logout),
     url('^cmdb/captcha[/]?$',captcha),
@@ -35,8 +35,8 @@ urlpatterns = [
     
     url('^cmdb/group[/]?(\d{1,11})?$',groups),
     url('^cmdb/group/type/(?P<grouptype>host|config)?$',groups),
-    url('^cmdb/group/relationship/(add|remove)$',relationship),
-    url('^cmdb/group/relationship/(add|remove)/(single2single|group2single|single2group|group2group)$',relationship),
+    url('^cmdb/relationship/(add|remove)$',relationship),
+    url('^cmdb/relationship/(add|remove)/(single2single|group2single|single2group|group2group)$',relationship),
     url('^cmdb/group/parameter/(add|remove)$',parameters),
     url('^cmdb/group/new$',new_group),
     url('^cmdb/group/edit/(\d{1,11})$',edit_group),
@@ -56,13 +56,15 @@ urlpatterns = [
     url('^cmdb/importreport$',importReport),
     
     url('^cmdb/application[/]?(\d{1,11})?$',applications),
+    url('^cmdb/application/new[/]?$',new_application),
     url('^cmdb/application/new/create$',create_application),
     url('^cmdb/application/new/detect$',detect_application),
     url('^cmdb/application/edit/(\d{1,11})$',edit_application),
     url('^cmdb/application/ping$',ping_docker),
     url('^cmdb/application/containers',list_containers),
     
-    url('^cmdb/image$',images),
+    url('^cmdb/image[/]?(\d{1,11})?$',images),
     url('^cmdb/image/new$',new_image),
-    url('^cmdb/image/edit/(\d{1,11})$',edit_image),
+    url('^cmdb/image/ping$',ping_registry),
+    url('^cmdb/image/tags',list_images)
 ]

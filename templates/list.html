@@ -31,16 +31,19 @@
             <tbody>
             {% for p in page %}
             <tr class="onerow" id="{{p.id}}">
-                <td >{{p.name}}
+                <td >{{p.name}}{{p.repository}}
                 <input type="hidden" id="url_{{p.id}}" value="{{p.url}}">
                 </td>
-                <td >{{p.ip}}{{p.engineip}}{{p.time|date:'Y-m-d H:i'}}</td>
+                <td >{{p.ip}}{{p.engineip}}{{p.time|date:'Y-m-d H:i'}}{{p.registryip}}</td>
                 <td >
                     {% for g in p.group.all %}
                         <span class="badge pull-right">{{g.name}}</span>
                     {% endfor%}
                     {% if p.status %}
                         <span class="badge pull-right">{{p.status}}</span>
+                    {% endif %}
+                    {% if p.tag %}
+                        <span class="badge pull-right">{{p.tag}}</span>
                     {% endif %}
                 </td>
             </tr>

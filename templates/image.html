@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load customtag%}
+{% block mainbody %}
+<div class="well" style="margin-left: auto;margin-right: auto;width: 720px;">
+    <div class="panel panel-primary">
+        <div class="panel-heading">{{title}}
+            <button type="button" class="btn btn-danger pull-right nopadding" id="btn_dele">Del</button>
+        </div>
+        <div class="panel-body">
+            <table class="table">
+            <tbody>
+            <tr class="info">
+                <td>Repository Name</td>
+                <td>{{baseinfo.repository}}</td>
+            </tr>
+            <tr>
+                <td>Tag</td>
+                <td>{{baseinfo.tag}}</td>
+            </tr>
+            <tr class="info">
+                <td>Image Id</td>
+                <td>{{baseinfo.imageid}}</td>
+            </tr>
+            <tr>
+                <td>Created</td>
+                <td>{{baseinfo.created|date:'Y-m-d H:i'}}</td>
+            </tr>
+            <tr class="info">
+                <td>Virtual Size</td>
+                <td>{{baseinfo.virtualsize}}</td>
+            </tr>
+            <tr>
+                <td>Registry</td>
+                <td>{{baseinfo.registryip}}:{{baseinfo.registryport}}</td>
+            </tr>
+            </tbody>
+            </table>
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="panel-apps-head"><span class="badge pull-right">{{apps|length}}</span>Application with this image</div>
+                <div class="panel-body collapse" id="panel-apps-body">
+                    <table class="table">
+                    <tbody>
+                    {% for app in apps %}
+                    <tr class="info">
+                        <td>{{app}}</td>
+                    </tr>
+                    {% endfor %} 
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function(){
+    s1=0;
+    $("#panel-apps-head").click(function(){
+        if(s1==0){
+            $("#panel-apps-body").collapse('show');
+            s1=1}
+        else{
+            $("#panel-apps-body").collapse('hide');
+            s1=0}
+    });
+    $("#btn_dele").click(function(){
+        if (confirm('This will delete the image info in the CMDB,the real image will not be delete,\nAre you sure?')) {
+            $.post(
+                "{{baseinfo.id}}",
+                {_method: "delete",csrfmiddlewaretoken: getCookie("csrftoken")},
+                function(data){window.location.href="/cmdb/image";}
+            )
+        };
+    });
+});
+function getCookie(name) { var cookieValue = null;if (document.cookie && document.cookie != '') {var cookies = document.cookie.split(';');for (var i = 0; i < cookies.length; i++) {var cookie = jQuery.trim(cookies[i]);if (cookie.substring(0, name.length + 1) == (name + '=')) {cookieValue = decodeURIComponent(cookie.substring(name.length + 1));break;}}}return cookieValue;}
+</script>
+<style>
+.nopadding {
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+}
+</style>
+{% endblock %}

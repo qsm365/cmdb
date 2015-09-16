@@ -16,12 +16,17 @@ class APPLICATION(models.Model):
         return self.name
     def setUrl(self,url):
         self.url=url
-
+    
 class IMAGE(models.Model):
     imageid=models.CharField(max_length=100)
     repository=models.CharField(max_length=30)
     tag=models.CharField(max_length=30)
-    virtualsize=models.IntegerField()
+    virtualsize=models.BigIntegerField()
     created=models.DateTimeField()
+    registryip=models.CharField(max_length=30)
+    registryport=models.CharField(max_length=10)
+    url=""
     def __str__(self):
-        return self.name
+        return self.imageid
+    def setUrl(self,url):
+        self.url=url

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block mainbody %}
+<div class="well" style="margin-left: auto;margin-right: auto;width: 720px;">
+    <div class="panel panel-primary">
+        <div class="panel-heading">Create New Image
+            <a id="id_next" class="btn btn-success pull-right nopadding" href="#">Next&gt;</a>
+            <a id="id_finish" class="btn btn-danger pull-right nopadding hide" href="#">Finish</a>
+        </div>
+        <div class="panel-body">
+            <div id='step1' class="">
+                <h2>Registry</h2>
+                <table id="img-step1" width="100%" class="table">
+                <tr>
+                    <td>
+                    <input id="id_host_search" name="search" placeholder="search ip or hostname" type="text" class="form-control">
+                    </td>
+                </tr>
+                <tr>
+                    <td><h4>Search Result:</h4>(Please select one docker registry server)
+                    </td>
+                </tr>
+                <tr height="220">
+                    <td>
+                    <select id="id_host_select" multiple="multiple" class="form-control" style="height:200px;">
+                    </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td id="id_td_port">
+                    <lable>Docker Registry Port:</lable>
+                    <input id="id_host_port" name="host_port" placeholder="5000" type="text" class="form-control">
+                    </td>
+                </tr>
+            </table>
+            </div>
+            <div id='step2' class="hide">
+                <h2>Images</h2>
+                <table width="100%" class="table">
+                    <tr>
+                        <td>(Please select one image)
+                        </td>
+                    </tr>
+                    <tr height="220">
+                        <td>
+                        <select id="id_image_select" multiple="multiple" class="form-control" style="height:200px;">
+                        </select>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function(){
+
+$('#id_host_search').on
+('input', function() 
+{
+$('#id_host_select').html("")
+if($('#id_host_search').val().length>=3){
+    $.getJSON("/cmdb/host/find?q="+$('#id_host_search').val(),function(result){
+        $.each(result, function(i, hostinfo){
+            //console.log("i:"+hostinfo.id+";field:"+hostinfo.ip)
+            $('#id_host_select').append($('<option>', 
+                {
+                    value: hostinfo.id+","+hostinfo.ip,
+                    text: "["+hostinfo.name+"]"+hostinfo.ip
+                })
+            );
+        });
+    });
+}
+});
+$('#id_host_port').on('input',function(){
+    if($('#id_host_port').val().length>0){
+        $('#id_td_port').removeClass('has-error')
+        $('#id_td_port').addClass('has-success')
+    }else{
+        $('#id_td_port').removeClass('has-success')
+        $('#id_td_port').addClass('has-error')
+    }
+});
+ip=0
+port=0
+image_id=0
+repository=0
+tag=0
+$('#id_next').click(function(){
+    sel=$('#id_host_select :selected').val()
+    ip=sel.split(',')[1]
+    hostid=sel.split(',')[0]
+    port=$('#id_host_port').val()
+    $.getJSON("/cmdb/image/ping?ip="+ip+"&port="+port,function(result){
+        if(result['result']=='ok'){
+            $("#id_next").addClass('hide');
+            $("#id_finish").removeClass('hide');
+            $.getJSON("/cmdb/image/tags?ip="+ip+"&port="+port,function(result){
+                $.each(result, function(i, image){
+                    $('#id_image_select').append($('<option>', 
+                    {
+                        value: image.image_id,
+                        text: image.name+"@"+image.tag
+                    }));
+                });
+            });
+            $("#step1").addClass('hide');
+            $("#step2").removeClass('hide');
+        }
+    });
+});
+$('#id_finish').click(function(){
+    image_id=$('#id_image_select :selected').val()
+    repository=$('#id_image_select :selected').text().split('@')[0]
+    tag=$('#id_image_select :selected').text().split('@')[1]
+    if(image_id!=0 && repository!=0 && tag!=0 && ip!=0 && port!=0){
+        $.post(
+            "",
+            {csrfmiddlewaretoken:getCookie("csrftoken"),ip:ip,port:port,image_id:image_id,repository:repository,tag:tag},
+            function(data){
+                if(data['result']=='ok'){
+                    window.location.href="/cmdb/image"
+                }else{
+                    alert('ERROR!')
+                }
+            }
+        );
+    }
+});
+
+});
+function getCookie(name) { var cookieValue = null;if (document.cookie && document.cookie != '') {var cookies = document.cookie.split(';');for (var i = 0; i < cookies.length; i++) {var cookie = jQuery.trim(cookies[i]);if (cookie.substring(0, name.length + 1) == (name + '=')) {cookieValue = decodeURIComponent(cookie.substring(name.length + 1));break;}}}return cookieValue;}
+</script>
+<style>
+.nopadding {
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+}
+</style>
+{% endblock %}

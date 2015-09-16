@@ -1,4 +1,4 @@
-from core.models import Resource,Host,Group
+from core.models import Resource,Host,Group,IP
 from puppet.models import PARAMETER
 
 def createByHost(hostid,key,value):
@@ -41,7 +41,7 @@ def delete(pid):
     paras=PARAMETER.objects.filter(id=pid)
     if paras:
         para=paras.first()
-        res=Resource.objects.filter(type='param',resource_id=para.id)
+        res=Resource.objects.filter(type='parameter',resource_id=para.id)
         if res:
             r=res.first()
             r.delete()
@@ -66,27 +66,18 @@ def listByGroup(groupid):
         group=groups.first()
         hosts=Host.objects.filter(group=group).all()
         if hosts:
-            re=set()
+            re={}
             for host in hosts:
+                r=[]
                 res=Resource.objects.filter(host=host,type="parameter")
                 if res:
-                    for r in res:
-                        para=PARAMETER.objects.filter(id=r.resource_id)
+                    for rs in res:
+                        para=PARAMETER.objects.filter(id=rs.resource_id)
                         if para:
-                            re.add(para.first())
+                            r.append(para.first())
+                if r:
+                    res=Resource.objects.filter(host=host,type="ip")
+                    if res:
+                        ip=IP.objects.filter(id=res.first().resource_id).first()
+                        re[ip.ipv4]=r
             return re
-                        
-def deleteByGroup(groupid,key):
-    groups=Group.objects.filter(id=groupid)
-    if groups:
-        group=groups.first()
-        hosts=Host.objects.filter(group=group).all()
-        if hosts:
-            for host in hosts:
-                res=Resource.objects.filter(host=host,type="parameter")
-                if res:
-                    for r in res:
-                        para=PARAMETER.objects.filter(id=r.resource_id,key=key)
-                        if para:
-                            r.delete()
-                            para.delete()

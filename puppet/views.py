@@ -78,10 +78,9 @@ def parameters(request,function):
                     parameter.createByGroup(groupid,d.keys()[0],d.values()[0])
                 return HttpResponse("ok")
         elif function=='remove':
-            groupid=request.POST.get("groupid")
-            delkey=request.POST.get("key")
-            if groupid and delkey:
-                parameter.deleteByGroup(groupid,delkey)
+            pid=request.POST.get("pid")
+            if pid:
+                parameter.delete(pid)
                 return HttpResponse("ok")
     else:
         if function=='add':
@@ -184,11 +183,13 @@ def parameter_find_json(request):
             re=parameter.listByGroup(gid)
             if re:
                 respones=[]
-                for i in re:
-                    s={}
-                    s['id']=i.id
-                    s['key']=i.key
-                    s['value']=i.value
-                    respones.append(s)
+                for i,paras in re.items():
+                    for par in paras:
+                        s={}
+                        s['id']=par.id
+                        s['ip']=i
+                        s['key']=par.key
+                        s['value']=par.value
+                        respones.append(s)
                 return JsonResponse(respones,safe=False)
     return JsonResponse([],safe=False)

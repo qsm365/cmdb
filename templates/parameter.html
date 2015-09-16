@@ -49,6 +49,7 @@
             <th>Select Host Group:</th>
             </thead><tbody><tr><td>
             <select id="hostlist2" class="form-control">
+                <option value="0"></option>
             {% for h in hostlist %}
                 <option value="{{h.id}}">{{h.name}}</option>
             {% endfor %}
@@ -59,6 +60,7 @@
             </table>
             <table class="table" id="table-param2">
             <thead>
+                <th class="col-sm-1">IP</th>
                 <th class="col-sm-1">key</th>
                 <th class="col-sm-1">value</th>
                 <th class="col-sm-1"></th>
@@ -77,12 +79,12 @@ $(document).ready(function(){
         $("#table-param2 tbody:last").html('')
         $.getJSON("/cmdb/parameter/find?groupid="+gid,function(result){
             $.each(result, function(i, para){
-                $("#table-param2 tbody:last").append('<tr id="tr_'+para.id+'"><td class="col-sm-1"><input id="input_para_key" type="text" value="'+para.key+'"/></td><td class="col-sm-1"><input id="input_para_val" type="text" value="'+para.value+'"/></td><td class="col-sm-1"><button type="button" class="btn btn-danger nopadding pull-right btn_del" onClick="para_del(\''+para.id+'\',\''+para.key+'\')">Del</button></td></tr>');
+                $("#table-param2 tbody:last").append('<tr id="tr_'+para.id+'"><td class="col-sm-1">'+para.ip+'</td><td class="col-sm-1">'+para.key+'</td><td class="col-sm-1">'+para.value+'</td><td class="col-sm-1"><button type="button" class="btn btn-danger nopadding pull-right btn_del" onClick="para_del(\''+para.id+'\')">Del</button></td></tr>');
             });
         });
     });
     $("#btn_para_add").click(function(){
-        $("#table-param tbody:last").append('<tr><td class="col-sm-1"><input id="input_para_key" type="text"/></td><td class="col-sm-1"><input id="input_para_val" type="text"/></td><td class="col-sm-1"><button type="button" class="btn btn-danger nopadding pull-right btn_del">Del</button></td></tr>');
+        $("#table-param tbody:last").append('<tr><td class="col-sm-1">'+para.ip+'</td><td class="col-sm-1"><input id="input_para_key" type="text"/></td><td class="col-sm-1"><input id="input_para_val" type="text"/></td><td class="col-sm-1"><button type="button" class="btn btn-danger nopadding pull-right btn_del">Del</button></td></tr>');
         $(".btn_del").click(function(){
             $(this).parent().parent().remove()
         });
@@ -104,16 +106,16 @@ $(document).ready(function(){
             "/cmdb/group/parameter/add",
             {csrfmiddlewaretoken: getCookie("csrftoken"),groupid:gid,data:json},
             function(data){
-	   	window.location.href="/cmdb/manage"; 
+	   	window.location.href="/cmdb"; 
 	    }
         )
     });
 });
 
-function para_del(id,key){
+function para_del(id){
     $.post(
         "/cmdb/group/parameter/remove",
-        {csrfmiddlewaretoken: getCookie("csrftoken"),key:key,groupid:$('#hostlist2').val()},
+        {csrfmiddlewaretoken: getCookie("csrftoken"),pid:id},
         function(data){
             $("#tr_"+id).remove()
         }

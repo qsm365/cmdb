@@ -70,7 +70,7 @@ def hostsWithConfig(configid):
     confs=CONFIG.objects.filter(id=configid)
     if confs:
         conf=confs.first()
-        res=Resource.objects.filter(type="puppet",resource_id=conf.id).all()
+        res=Resource.objects.filter(type="config",resource_id=conf.id).all()
     re=[]
     for r in res:
         re.append(r.host)

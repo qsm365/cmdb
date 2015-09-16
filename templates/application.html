@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load customtag%}
+{% block mainbody %}
+<div class="well" style="margin-left: auto;margin-right: auto;width: 720px;">
+    <div class="panel panel-primary">
+        <div class="panel-heading">{{title}}
+            <button type="button" class="btn btn-danger pull-right nopadding" id="btn_dele">Del</button>
+            <button type="button" class="btn btn-success pull-right nopadding" id="btn_edit">Edit</button>
+        </div>
+        <div class="panel-body">
+            <table class="table">
+            <tbody>
+            <tr class="info">
+                <td>Application Name</td>
+                <td>{{baseinfo.name}}</td>
+            </tr>
+            <tr class="">
+                <td>Description</td>
+                <td>{{baseinfo.description}}</td>
+            </tr>
+            <tr class="info">
+                <td>Container Name</td>
+                <td>{{baseinfo.containername}}</td>
+            </tr>
+            <tr class="">
+                <td>Created</td>
+                <td>{{baseinfo.created|date:'Y-m-d H:i'}}</td>
+            </tr>
+            <tr class="info">
+                <td>Engine IP</td>
+                <td>{{baseinfo.engineip}}</td>
+            </tr>
+            <tr class="">
+                <td>Engine Port</td>
+                <td>{{baseinfo.engineport}}</td>
+            </tr>
+            </tbody>
+            </table>
+            
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="panel-status-head"><span class="badge pull-right">{{baseinfo.status}}</span>Status</div>
+                <div class="panel-body collapse" id="panel-status-body">
+                    <table class="table">
+                    <tbody>
+                    <tr class="info">
+                        <td>PID</td>
+                        <td>{{inspect.State.Pid}}</td>
+                    </tr>
+                    <tr class="">
+                        <td>Started</td>
+                        <td>{{inspect.State.StartedAt}}</td>
+                    </tr>
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+            <table class="table">
+                <tr class="info">
+                    <td>Image</td>
+                    <td>{{inspect.Config.Image}}</td>
+                </tr>
+                <tr>
+                    <td>Hostname</td>
+                    <td>{{inspect.Config.Hostname}}</td>
+                </tr>
+            </table>
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="panel-env-head"><span class="badge pull-right">{{inspect.Config.Env|length}}</span>Environments</div>
+                <div class="panel-body collapse" id="panel-env-body">
+                    <table class="table">
+                    <tbody>
+                    {% for env in inspect.Config.Env %}
+                    <tr class="info">
+                        <td>{{env}}</td>
+                    </tr>
+                    {% endfor %} 
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="panel-vloumes-head"><span class="badge pull-right">{{inspect.Volumes|length}}</span>Volumes</div>
+                <div class="panel-body collapse" id="panel-vloumes-body">
+                    <table class="table">
+                    <thead>
+                    <tr>
+                        <td>source</td>
+                        <td>target</td>
+                        <td>RW</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for v,vol in inspect.Volumes.items %}
+                    <tr class="info">
+                        <td>{{vol}}</td>
+                        <td>{{v}}</td>
+                        <td>{{inspect.VolumesRW|lookup:v}}</td>
+                    </tr>
+                    {% endfor %} 
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+            <table class="table">
+                <tr class="info">
+                    <td>IP</td>
+                    <td>{{inspect.NetworkSettings.IPAddress}}</td>
+                </tr>
+                <tr>
+                    <td>Gateway</td>
+                    <td>{{inspect.NetworkSettings.Gateway}}</td>
+                </tr>
+                <tr class="info">
+                    <td>MacAddress</td>
+                    <td>{{inspect.NetworkSettings.MacAddress}}</td>
+                </tr>
+            </table>
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="panel-ports-head"><span class="badge pull-right">{{inspect.NetworkSettings.Ports|length}}</span>Ports</div>
+                <div class="panel-body collapse" id="panel-ports-body">
+                    <table class="table">
+                    <thead>
+                    <tr>
+                        <td>source</td>
+                        <td>target</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for v,ps in inspect.NetworkSettings.Ports.items %}
+                        {% for p in ps %}
+                        <tr class="info">
+                            <td>{{v}}</td>
+                            <td>{{p.HostIp}}:{{p.HostPort}}</td>
+                        </tr>
+                        {% endfor %}
+                    {% endfor %} 
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="panel-config-head">Advance Configs</div>
+                <div class="panel-body collapse" id="panel-config-body">
+                    <table class="table">
+                    <tr>
+                        <td>Privileged</td>
+                        <td>{{inspect.HostConfig.Privileged}}</td>
+                    </tr>
+                    <tr>
+                        <td>NetworkMode</td>
+                        <td>{{inspect.HostConfig.NetworkMode}}</td>
+                    </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function(){
+    $(".collapse").collapse('hide');
+    s1=0;
+    s2=0;
+    s3=0;
+    s4=0;
+    s5=0;
+    $("#panel-status-head").click(function(){
+        if(s1==0){
+            $("#panel-status-body").collapse('show');
+            s1=1}
+        else{
+            $("#panel-status-body").collapse('hide');
+            s1=0}
+    });
+    $("#panel-env-head").click(function(){
+        if(s2==0){
+            $("#panel-env-body").collapse('show');
+            s2=1}
+        else{
+            $("#panel-env-body").collapse('hide');
+            s2=0}
+    });
+    $("#panel-vloumes-head").click(function(){
+        if(s3==0){
+            $("#panel-vloumes-body").collapse('show');
+            s3=1}
+        else{
+            $("#panel-vloumes-body").collapse('hide');
+            s3=0}
+    });
+    $("#panel-ports-head").click(function(){
+        if(s4==0){
+            $("#panel-ports-body").collapse('show');
+            s4=1}
+        else{
+            $("#panel-ports-body").collapse('hide');
+            s4=0}
+    });
+    $("#panel-config-head").click(function(){
+        if(s5==0){
+            $("#panel-config-body").collapse('show');
+            s5=1}
+        else{
+            $("#panel-config-body").collapse('hide');
+            s5=0}
+    });
+    $("#btn_edit").click(function(){
+        window.location.href="/cmdb/application/edit/{{baseinfo.id}}";
+    });
+    $("#btn_dele").click(function(){
+        if (confirm('This will delete the container info in the CMDB,the real container will not be delete,\nAre you sure?')) {
+            $.post(
+                "{{baseinfo.id}}",
+                {_method: "delete",csrfmiddlewaretoken: getCookie("csrftoken")},
+                function(data){window.location.href="/cmdb/application";}
+            )
+        };
+    });
+})
+
+function getCookie(name) { var cookieValue = null;if (document.cookie && document.cookie != '') {var cookies = document.cookie.split(';');for (var i = 0; i < cookies.length; i++) {var cookie = jQuery.trim(cookies[i]);if (cookie.substring(0, name.length + 1) == (name + '=')) {cookieValue = decodeURIComponent(cookie.substring(name.length + 1));break;}}}return cookieValue;}
+</script>
+<style>
+.nopadding {
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+}
+</style>
+{% endblock %}
