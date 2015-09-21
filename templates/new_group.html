@@ -194,7 +194,7 @@ $('#id_finish').click(function(){
         $.post( 
 		"/cmdb/group", 
 		{ _method:"new",name: $('#id_name').val(),type: $('#id_type').val(),member: member_list, csrfmiddlewaretoken: getCookie("csrftoken") },
-		function(data){window.location.href="/cmdb/manage/"
+		function(data){window.location.href="/cmdb/group/"
 	});
     }else{
         member_list="";
@@ -205,7 +205,7 @@ $('#id_finish').click(function(){
         $.post( 
 		"/cmdb/group", 
 		{ _method:"new",name: $('#id_name').val(),type: $('#id_type').val(),member: member_list, csrfmiddlewaretoken: getCookie("csrftoken") },
-		function(data){window.location.href="/cmdb/manage/"
+		function(data){window.location.href="/cmdb/group/"
 	});
     }
 

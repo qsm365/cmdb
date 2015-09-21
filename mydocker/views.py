@@ -1,8 +1,10 @@
-from django.http import JsonResponse,HttpResponseRedirect,HttpResponse
+from django.http import JsonResponse,HttpResponseRedirect,HttpResponse,HttpResponseNotFound
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from mydocker import dockerclient,application,image
 from django.core.paginator import Paginator
+from django.views.decorators.csrf import csrf_exempt
+from json import JSONDecoder
 
 # Create your views here.
 @login_required
@@ -41,6 +43,22 @@ def applications(request,appid=0):
                 description=request.POST.get('description')
                 if name:
                     application.edit(appid, name, description)
+                return HttpResponse("ok")
+            if meth=='start':
+                app=application.show(appid)
+                containerid=app.containerid
+                ip=app.engineip
+                port=app.engineport
+                dockerclient.start(ip, port, containerid)
+                application.updateStatus(app)
+                return HttpResponse("ok")
+            if meth=='stop':
+                app=application.show(appid)
+                containerid=app.containerid
+                ip=app.engineip
+                port=app.engineport
+                dockerclient.stop(ip, port, containerid)
+                application.updateStatus(app)
                 return HttpResponse("ok")
         else:
             context={}
@@ -102,10 +120,107 @@ def new_application(request):
 
 @login_required
 def create_application(request):
-    context={}
-    context['title']="Create Application"
-    context['meth']="new"
-    return render(request,'create_application.html',context)
+    if request.method == 'GET':
+        context={}
+        context['title']="Create Application"
+        context['images']=image.showAll()
+        return render(request,'create_application.html',context)
+    elif request.method == 'POST':
+        meth=request.POST['meth']
+        ip=request.POST['ip']
+        port=request.POST['port']
+        imagename=request.POST['imagename']
+        if meth=='pull':
+            re=dockerclient.pull(ip, port, imagename)
+            if re:
+                respones={}
+                respones['result']='ok'
+                respones['msg']=re
+                return JsonResponse(respones,safe=False)
+            else:
+                respones={}
+                respones['result']='fail'
+                return JsonResponse(respones,safe=False)
+        elif meth=="create":
+            hostid=request.POST['hostid']
+            name=request.POST['name']
+            description=request.POST['description']
+            
+            l_command=request.POST['command']
+            l_entrypoint=request.POST['entrypoint']
+            container_name=request.POST['container_name']
+            host_name=request.POST['host_name']
+            network_mode=request.POST['network_mode']
+            privileged=True if request.POST['privileged']=="true" else False
+            l_security_opt=request.POST['security_opt']
+            ulimit_nofile=request.POST['ulimit_nofile']
+            ulimit_noproc=request.POST['ulimit_noproc']
+            arr_ports = JSONDecoder().decode(request.POST['ports'])
+            arr_volum = JSONDecoder().decode(request.POST['volum'])
+            arr_dns_server = JSONDecoder().decode(request.POST['dns_server'])
+            arr_hosts = JSONDecoder().decode(request.POST['hosts'])
+            arr_environment = JSONDecoder().decode(request.POST['environment'])
+            ports=[]
+            port_bindings={}
+            command=[]
+            command=l_command.split(";")
+            entrypoint=[]
+            entrypoint=l_entrypoint.split(";")
+            security_opt=[]
+            security_opt=l_security_opt.split(";")
+            for p in arr_ports:
+                if p.split(":")[0]:
+                    port_bindings[int(p.split(":")[0])]=int(p.split(":")[1])
+                    ports.append(int(p.split(":")[0]))
+            print port_bindings
+            print ports
+            volume=[]
+            binds={}
+            for v in arr_volum:
+                vv={}
+                if v.split(":")[0]:
+                    vv['bind']=v.split(":")[1]
+                    vv['mode']='rw'
+                    volume.append(v.split(":")[1])
+                    binds[v.split(":")[0]]=vv
+            dns_server=[]
+            for d in arr_dns_server:
+                if d:
+                    dns_server.append(d)
+            hosts={}
+            for h in arr_hosts:
+                if h.split(":")[0]:
+                    hosts[h.split(":")[0]]=h.split(":")[1]
+            environment={}
+            for e in arr_environment:
+                if e.split(":")[0]:
+                    environment[e.split(":")[0]]=e.split(":")[1]
+            msg=application.create_new(ip, 
+                                       port, 
+                                       hostid, 
+                                       name, 
+                                       description, 
+                                       imagename,
+                                       command,
+                                       entrypoint, 
+                                       container_name, 
+                                       host_name, 
+                                       network_mode, 
+                                       privileged, 
+                                       security_opt, 
+                                       ulimit_nofile, 
+                                       ulimit_noproc, 
+                                       ports, 
+                                       port_bindings, 
+                                       volume, 
+                                       binds, 
+                                       dns_server, 
+                                       hosts,
+                                       environment)
+            respones={}
+            respones['result']='ok'
+            respones['msg']=msg
+            return JsonResponse(respones,safe=False)
 
 @login_required
 def detect_application(request):
@@ -139,7 +254,6 @@ def edit_application(request,appid=0):
     else:
         return HttpResponseRedirect("/cmdb/application")
         
-
 @login_required
 def new_image(request):
     if request.method == 'GET':
@@ -210,3 +324,29 @@ def list_images(request):
             if re:
                 return JsonResponse(re,safe=False)
     return JsonResponse([],safe=False)
+
+@csrf_exempt
+def container_update(request):
+    if request.method == 'GET':
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        port="2375"
+        if ip and port:
+            ping=dockerclient.testEngine(ip, port)
+            if ping:
+                re1=dockerclient.listContainers(ip,port)
+                re2=application.listByIp(ip)
+                if re1:
+                    for re in re1:
+                        #auto detect
+                        if not application.exist(re['id']):
+                            application.auto_detect(ip, port, re['id'])
+                if re2:    
+                    for re in re2:
+                        #update status
+                        application.updateStatus(re)
+                return HttpResponse("ok")
+    return HttpResponseNotFound("403")

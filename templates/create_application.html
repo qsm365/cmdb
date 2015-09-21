@@ -4,9 +4,10 @@
 <div class="well" style="margin-left: auto;margin-right: auto;width: 720px;">
     <div class="panel panel-primary">
         <div class="panel-heading">Create New Application
-            <a id="id_next" class="btn btn-success pull-right nopadding" href="#">Next&gt;</a>
+            <a id="id_next1" class="btn btn-success pull-right nopadding" href="#">Next&gt;</a>
+            <a id="id_next2" class="btn btn-success pull-right nopadding hide" href="#">Next&gt;</a>
+            <a id="id_next3" class="btn btn-success pull-right nopadding hide" href="#">Next&gt;</a>
             <a id="id_finish" class="btn btn-danger pull-right nopadding hide" href="#">Finish</a>
-            <a id="id_back" class="btn btn-warning pull-right nopadding" href="#">&lt;Back</a>
         </div>
         <div class="panel-body">
             <div id='step1' class="">
@@ -35,35 +36,54 @@
                 </tr>
             </table>
             </div>
-            <div id='step2' class="">
+            <div id='step2' class="hide">
             <h2>Application</h2>
             <table width="100%" class="table">
                 <tr>
                     <td>name</td>
                     <td id="id_td_name">
-                        <input id="id_name" name="app_name" placeholder="name" type="text" class="form-control">
+                        <input id="id_name" name="app_name" placeholder="" type="text" class="form-control">
                     </td>
                 </tr>
                 <tr>
                     <td>description</td>
                     <td id="id_td_desc">
-                        <input id="id_desc" name="app_desc" placeholder="description" type="text" class="form-control">
+                        <input id="id_desc" name="app_desc" placeholder="" type="text" class="form-control">
                     </td>
                 </tr>
                 <tr>
                     <td>image</td>
                     <td id="id_td_image">
                         <select id="id_image" class="form-control">
-                        {% for img in imagelist %}
-                            <option value="{{img.id}}">{{img.name}}</option>
+                            <option value="0">Please select</option>
+                        {% for img in images %}
+                            <option value="{{img.registryip}}:{{img.registryport}}/{{img.repository}}:{{img.tag}}">{{img.registryip}}:{{img.registryport}}/{{img.repository}}:{{img.tag}}</option>
                         {% endfor %}
                         </select>
                     </td>
                 </tr>
                 <tr>
+                    <td>container_name</td>
+                    <td id="id_td_container_name">
+                        <input id="id_container_name" name="app_container_name" placeholder="" type="text" class="form-control">
+                    </td>
+                </tr>
+                <tr>
+                    <td>command</td>
+                    <td id="id_td_command">
+                        <input id="id_command" name="app_command" placeholder="use ; to split" type="text" class="form-control">
+                    </td>
+                </tr>
+                <tr>
+                    <td>entrypoint</td>
+                    <td id="id_td_entrypoint">
+                        <input id="id_entrypoint" name="app_entrypoint" placeholder="use ; to split" type="text" class="form-control">
+                    </td>
+                </tr>
+                <tr>
                     <td>host_name</td>
                     <td id="id_td_host_name">
-                        <input id="id_host_name" name="app_host_name" placeholder="host_name" type="text" class="form-control">
+                        <input id="id_host_name" name="app_host_name" placeholder="" type="text" class="form-control">
                     </td>
                 </tr>
                 <tr>
@@ -80,25 +100,37 @@
                     <td>privileged</td>
                     <td id="id_td_privileged">
                         <label>
-                        <input type="checkbox"> True
+                        <input id="id_privileged" type="checkbox"> True
                         </label>
                     </td>
                 </tr>
                 <tr>
                     <td>security_opt</td>
                     <td id="id_td_security_opt">
-                        <input id="id_security_opt" name="app_security_opt" placeholder="security_opt" type="text" class="form-control">
+                        <input id="id_security_opt" name="app_security_opt" placeholder="use ; to split" type="text" class="form-control">
+                    </td>
+                </tr>
+                <tr>
+                    <td>ulimit nofile</td>
+                    <td id="id_td_ulimit_nofile">
+                        <input id="id_ulimit_nofile" name="app_ulimit_nofile" placeholder="" type="text" class="form-control">
+                    </td>
+                </tr>
+                <tr>
+                    <td>ulimit noproc</td>
+                    <td id="id_td_ulimit_noproc">
+                        <input id="id_ulimit_noproc" name="app_ulimit_noproc" placeholder="" type="text" class="form-control">
                     </td>
                 </tr>
             </table>
             </div>
-            <div id='step3' class="">
+            <div id='step3' class="hide">
             <h2>Port</h2>
             <table class="table" id="table-port">
             <thead>
             <tr>
-                <th class="col-sm-1">source port</th>
-                <th class="col-sm-1">target port</th>
+                <th class="col-sm-1">host port</th>
+                <th class="col-sm-1">container port</th>
                 <th class="col-sm-1">
                     <button type="button" class="btn btn-info nopadding pull-right" id="btn_port_add">Add</button>
                 </th>
@@ -126,8 +158,8 @@
             <table class="table" id="table-volum">
             <thead>
             <tr>
-                <th class="col-sm-1">source volum</th>
-                <th class="col-sm-1">target volum</th>
+                <th class="col-sm-1">host volum</th>
+                <th class="col-sm-1">container volum</th>
                 <th class="col-sm-1">
                     <button type="button" class="btn btn-info nopadding pull-right" id="btn_vol_add">Add</button>
                 </th>
@@ -152,7 +184,7 @@
             </tbody>
             </table>
             </div>
-            <div id='step4' class="">
+            <div id='step4' class="hide">
             <h2>DNS Server</h2>
             <table class="table" id="table-dns">
             <tbody>
@@ -188,6 +220,25 @@
                 <td class="col-sm-1"><input type="text" value=""/></td>
                 <td class="col-sm-1"></td>
             </tr>
+            </tbody>
+            </table>
+            <h2>Environment</h2>
+            <table class="table" id="table-environment">
+            <thead>
+            <tr>
+                <th class="col-sm-1">key</th>
+                <th class="col-sm-1">value</th>
+                <th class="col-sm-1">
+                    <button type="button" class="btn btn-info nopadding pull-right" id="btn_environment_add">Add</button>
+                </th>
+            <tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="col-sm-1"><input type="text" value=""/></td>
+                <td class="col-sm-1"><input type="text" value=""/></td>
+                <td class="col-sm-1"></td>
+            </tr>
             <tr>
                 <td class="col-sm-1"><input type="text" value=""/></td>
                 <td class="col-sm-1"><input type="text" value=""/></td>
@@ -196,11 +247,182 @@
             </tbody>
             </table>
             </div>
+            <div id='step5' class="hide">
+                <h2 id='id_msg_pull'></h2>
+                <h2 id='id_msg_create'></h2>
+            </div>
         </div>
     </div>
 </div>
 <script>
+$(document).ready(function(){
 
+ip=0
+port=0
+hostid=0
+name=0
+description=0
+imagename=0
+command=0
+entrypoint=0
+container_name=0
+host_name=0
+network_mode=0
+privileged=0
+security_opt=0
+ulimit_nofile=0
+ulimit_noproc=0
+var ports = new Array()
+var volum = new Array()
+var dns_server = new Array()
+var hosts = new Array()
+var environment = new Array()
+
+$('#id_next1').click(function(){
+    sel=$('#id_host_select :selected').val()
+    ip=sel.split(',')[1]
+    hostid=sel.split(',')[0]
+    port=$('#id_host_port').val()
+    $.getJSON("/cmdb/application/ping?ip="+ip+"&port="+port,function(result){
+        if(result['result']=='ok'){
+            $("#id_next1").addClass('hide');
+            $("#id_next2").removeClass('hide');
+            $("#step1").addClass('hide');
+            $("#step2").removeClass('hide');
+        }
+    });
+});
+$('#id_next2').click(function(){
+    name=$("#id_name").val();
+    description=$("#id_desc").val();
+    imagename=$("#id_image :selected").val();
+    command=$("#id_command").val();
+    entrypoint=$("#id_entrypoint").val();
+    container_name=$("#id_container_name").val();
+    host_name=$("#id_host_name").val();
+    network_mode=$("#id_network_mode").val();
+    privileged=$("#id_privileged").prop("checked");
+    security_opt=$("#id_security_opt").val();
+    ulimit_nofile=$("#id_ulimit_nofile").val();
+    ulimit_noproc=$("#id_ulimit_noproc").val();
+    $("#id_next2").addClass('hide');
+    $("#id_next3").removeClass('hide');
+    $("#step2").addClass('hide');
+    $("#step3").removeClass('hide');
+});
+$('#id_next3').click(function(){
+    $("#table-port tbody tr").each(function(trindex,tritem){
+        v=$(tritem).find("input").eq(0).val()+":"+$(tritem).find("input").eq(1).val()
+        ports.push(v)
+    });
+    $("#table-volum tbody tr").each(function(trindex,tritem){
+        v=$(tritem).find("input").eq(0).val()+":"+$(tritem).find("input").eq(1).val()
+        volum.push(v)
+    });
+    $("#id_next3").addClass('hide');
+    $("#id_finish").removeClass('hide');
+    $("#step3").addClass('hide');
+    $("#step4").removeClass('hide');
+});
+$('#id_finish').click(function(){
+    $("#table-dns tbody tr").each(function(trindex,tritem){
+        v=$(tritem).find("input").eq(0).val()
+        dns_server.push(v)
+    });
+    $("#table-hosts tbody tr").each(function(trindex,tritem){
+        v=$(tritem).find("input").eq(0).val()+":"+ $(tritem).find("input").eq(1).val()
+        hosts.push(v)
+    });
+    $("#table-environment tbody tr").each(function(trindex,tritem){
+        v=$(tritem).find("input").eq(0).val()+":"+ $(tritem).find("input").eq(1).val()
+        environment.push(v)
+    });
+    $("#id_finish").addClass('hide');
+    $("#step4").addClass('hide');
+    $("#step5").removeClass('hide');
+    
+    $('#id_msg_pull').html("Start Pulling Image...")
+    $.post(
+        "",
+        {meth:"pull",csrfmiddlewaretoken:getCookie("csrftoken"),ip:ip,hostid:hostid,port:port,imagename:imagename},
+        function(data1){
+            if(data1['result']=='ok'){
+            $('#id_msg_pull').html("Image Pulled")
+            $('#id_msg_create').html("Start Creating Container...")
+            $.post(
+                "",
+                {meth:"create",csrfmiddlewaretoken:getCookie("csrftoken"),ip:ip,hostid:hostid,port:port,name:name,description:description,imagename:imagename,command:command,entrypoint:entrypoint,container_name:container_name,host_name:host_name,network_mode:network_mode,privileged:privileged,security_opt:security_opt,ulimit_nofile:ulimit_nofile,ulimit_noproc:ulimit_noproc,ports:$.toJSON(ports),volum:$.toJSON(volum),dns_server:$.toJSON(dns_server),hosts:$.toJSON(hosts),environment:$.toJSON(environment)},
+                function(data2){
+                    if(data2['result']=='ok'){
+                        alert(data2['msg'])
+                        window.location.href="/cmdb/application"
+                    }else{
+                        alert('CREATE ERROR!')
+                    }
+                }
+            );}else{
+                alert('PULL ERROR!')
+            }
+        }
+    );
+});
+
+$('#btn_port_add').click(function(){
+    $("#table-port tbody:last").append('<tr><td class="col-sm-1"><input type="text" value=""/></td><td class="col-sm-1"><input type="text" value=""/></td><td class="col-sm-1"></td></tr>');
+});
+
+$('#btn_vol_add').click(function(){
+    $("#table-volum tbody:last").append('<tr><td class="col-sm-1"><input type="text" value=""/></td><td class="col-sm-1"><input type="text" value=""/></td><td class="col-sm-1"></td></tr>');
+});
+        
+$('#btn_hosts_add').click(function(){
+    $("#table-hosts tbody:last").append('<tr><td class="col-sm-1"><input type="text" value=""/></td><td class="col-sm-1"><input type="text" value=""/></td><td class="col-sm-1"></td></tr>');
+});
+
+$('#btn_environment_add').click(function(){
+    $("#table-environment tbody:last").append('<tr><td class="col-sm-1"><input type="text" value=""/></td><td class="col-sm-1"><input type="text" value=""/></td><td class="col-sm-1"></td></tr>');
+});
+
+$('#id_host_search').on
+('input', function() 
+{
+$('#id_host_select').html("")
+if($('#id_host_search').val().length>=3){
+    $.getJSON("/cmdb/host/find?q="+$('#id_host_search').val(),function(result){
+        $.each(result, function(i, hostinfo){
+            //console.log("i:"+hostinfo.id+";field:"+hostinfo.ip)
+            $('#id_host_select').append($('<option>', 
+                {
+                    value: hostinfo.id+","+hostinfo.ip,
+                    text: "["+hostinfo.name+"]"+hostinfo.ip
+                })
+            );
+        });
+    });
+}
+});
+$('#id_host_port').on('input',function(){
+    if($('#id_host_port').val().length>0){
+        $('#id_td_port').removeClass('has-error')
+        $('#id_td_port').addClass('has-success')
+    }else{
+        $('#id_td_port').removeClass('has-success')
+        $('#id_td_port').addClass('has-error')
+    }
+});
+
+
+$('#id_name').on('input',function(){
+    if($('#id_name').val().length>0){
+        $('#id_td_name').removeClass('has-error')
+        $('#id_td_name').addClass('has-success')
+    }else{
+        $('#id_td_name').removeClass('has-success')
+        $('#id_td_name').addClass('has-error')
+    }
+});
+
+});
 function getCookie(name) { var cookieValue = null;if (document.cookie && document.cookie != '') {var cookies = document.cookie.split(';');for (var i = 0; i < cookies.length; i++) {var cookie = jQuery.trim(cookies[i]);if (cookie.substring(0, name.length + 1) == (name + '=')) {cookieValue = decodeURIComponent(cookie.substring(name.length + 1));break;}}}return cookieValue;}
 </script>
 <style>

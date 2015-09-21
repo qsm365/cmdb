@@ -1,13 +1,34 @@
 from mydocker.models import APPLICATION
-from core.models import Host,Resource
+from core.models import Host,Resource,IP
 import dockerclient
 
-def create_new():
-    return
+def create_new(engine_ip,engine_port,host_id,name,description,imagename,command,entrypoint,container_name,host_name,network_mode,privileged,security_opt,ulimit_nofile,ulimit_noproc,ports,port_bindings,volume,binds,dns_server,hosts,environment):
+    containerinfo=dockerclient.create(engine_ip, engine_port, imagename,command,entrypoint,container_name,host_name,network_mode,privileged,security_opt,ulimit_nofile,ulimit_noproc,ports,port_bindings,volume,binds,dns_server,hosts,environment)
+    if containerinfo:
+        app=APPLICATION()
+        app.name=name
+        app.description=description
+        app.containerid=containerinfo['container_id']
+        app.containername=containerinfo['container_name']
+        app.image=containerinfo['image']
+        app.created=containerinfo['created']
+        app.status=containerinfo['status']
+        app.engineip=engine_ip
+        app.engineport=engine_port
+        app.save()
+        hosts=Host.objects.filter(id=host_id)
+        if hosts:
+            host=hosts.first()
+            res=Resource()
+            res.type="application"
+            res.host=host
+            res.resource_id=app.id
+            res.save()
+        return "create success"
+    return "create failed:"+str(containerinfo['msg'])
 
 def create_detect(host_id,engine_ip,engine_port,container_id,app_name,app_desc):
     containerinfo=dockerclient.detect(engine_ip, engine_port, container_id)
-    #print containerinfo
     if containerinfo:
         app=APPLICATION()
         app.name=app_name
@@ -20,7 +41,6 @@ def create_detect(host_id,engine_ip,engine_port,container_id,app_name,app_desc):
         app.engineip=engine_ip
         app.engineport=engine_port
         app.save()
-        #print "1"
         hosts=Host.objects.filter(id=host_id)
         if hosts:
             host=hosts.first()
@@ -29,7 +49,6 @@ def create_detect(host_id,engine_ip,engine_port,container_id,app_name,app_desc):
             res.host=host
             res.resource_id=app.id
             res.save()
-            #print "2"
 
 def show(appid):
     app=APPLICATION.objects.filter(id=appid)
@@ -58,6 +77,11 @@ def listByHost(hostid):
             re.append(app)
         return re
 
+def listByIp(ip):
+    re=APPLICATION.objects.filter(engineip=ip)
+    if re:
+        return re.all()
+
 def delete(appid):
     apps=APPLICATION.objects.filter(id=appid)
     if apps:
@@ -71,3 +95,38 @@ def edit(appid,name,description):
         app.name=name
         app.description=description
         app.save()
+
+def exist(containerid):
+    re=APPLICATION.objects.filter(containerid=containerid)
+    if re:
+        return True
+    return False
+
+def updateStatus(app):
+    app.status=dockerclient.updateContainerStatus(app.engineip, app.engineport, app.containerid)
+    app.save()
+    
+def auto_detect(engine_ip,engine_port,container_id):
+    ip=IP.objects.filter(ipv4__contains=engine_ip)
+    if ip:
+        containerinfo=dockerclient.detect(engine_ip, engine_port, container_id)
+        if containerinfo:
+            app=APPLICATION()
+            app.name="[auto detect]"+containerinfo['container_name']
+            app.description="[auto detect]"+str(containerinfo['container_name'])
+            app.containerid=container_id
+            app.containername=containerinfo['container_name']
+            app.image=containerinfo['image']
+            app.created=containerinfo['created']
+            app.status=containerinfo['status']
+            app.engineip=engine_ip
+            app.engineport=engine_port
+            app.save()
+            i=ip.first()
+            res=Resource.objects.filter(type='ip',resource_id=i.id)
+            host=res.first().host
+            res=Resource()
+            res.type="application"
+            res.host=host
+            res.resource_id=app.id
+            res.save()

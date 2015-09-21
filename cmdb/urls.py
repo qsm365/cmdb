@@ -55,6 +55,8 @@ urlpatterns = [
     url('^cmdb/enc$',externalNodeClassifier),
     url('^cmdb/importreport$',importReport),
     
+    url('^cmdb/container/update$',container_update),
+    
     url('^cmdb/application[/]?(\d{1,11})?$',applications),
     url('^cmdb/application/new[/]?$',new_application),
     url('^cmdb/application/new/create$',create_application),

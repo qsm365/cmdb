@@ -7,6 +7,12 @@
         <div class="panel-heading">{{title}}
             <button type="button" class="btn btn-danger pull-right nopadding" id="btn_dele">Del</button>
             <button type="button" class="btn btn-success pull-right nopadding" id="btn_edit">Edit</button>
+            {% ifequal baseinfo.status "stopped" %}
+            <button type="button" class="btn btn-info pull-right nopadding" id="btn_start">Start</button>
+            {% endifequal %}
+            {% ifequal baseinfo.status "running" %}
+            <button type="button" class="btn btn-info pull-right nopadding" id="btn_stop">Stop</button>
+            {% endifequal %}
         </div>
         <div class="panel-body">
             <table class="table">
@@ -20,18 +26,22 @@
                 <td>{{baseinfo.description}}</td>
             </tr>
             <tr class="info">
+                <td>Container ID</td>
+                <td>{{baseinfo.containerid}}</td>
+            </tr>
+            <tr class="">
                 <td>Container Name</td>
                 <td>{{baseinfo.containername}}</td>
             </tr>
-            <tr class="">
+            <tr class="info">
                 <td>Created</td>
                 <td>{{baseinfo.created|date:'Y-m-d H:i'}}</td>
             </tr>
-            <tr class="info">
+            <tr class="">
                 <td>Engine IP</td>
                 <td>{{baseinfo.engineip}}</td>
             </tr>
-            <tr class="">
+            <tr class="info">
                 <td>Engine Port</td>
                 <td>{{baseinfo.engineport}}</td>
             </tr>
@@ -216,6 +226,27 @@ $(document).ready(function(){
                 function(data){window.location.href="/cmdb/application";}
             )
         };
+    });
+    $("#btn_start").click(function(){
+        $("#btn_start").addClass("disable")
+        if (confirm('This will realley start the container,Ary YOU sure?')) {
+            $.post(
+                "{{baseinfo.id}}",
+                {_method: "start",csrfmiddlewaretoken: getCookie("csrftoken")},
+                function(data){window.location.href="/cmdb/application/{{baseinfo.id}}";}
+            )
+        }
+    });
+    
+    $("#btn_stop").click(function(){
+        $("#btn_stop").addClass("disable")
+        if (confirm('This will really stop the container,Are YOU sure?')) {
+            $.post(
+                "{{baseinfo.id}}",
+                {_method: "stop",csrfmiddlewaretoken: getCookie("csrftoken")},
+                function(data){window.location.href="/cmdb/application/{{baseinfo.id}}";}
+            )
+        }
     });
 })
 

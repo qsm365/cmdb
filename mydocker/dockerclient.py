@@ -1,10 +1,11 @@
+from docker.utils import create_host_config
 from docker import Client
 from _mysql import result
 import requests
 
 def testEngine(engine_ip,engine_port):
-    cli=Client(base_url="tcp://"+engine_ip+":"+engine_port)
     try:
+        cli=Client(base_url="tcp://"+engine_ip+":"+engine_port)
         result=cli.ping()
         if result=="OK":
             return True
@@ -13,8 +14,8 @@ def testEngine(engine_ip,engine_port):
     return False
 
 def listContainers(engine_ip,engine_port):
-    cli=Client(base_url="tcp://"+engine_ip+":"+engine_port)
     try:
+        cli=Client(base_url="tcp://"+engine_ip+":"+engine_port)
         result=cli.containers(all=True)
         ret=[]
         for re in result:
@@ -27,9 +28,9 @@ def listContainers(engine_ip,engine_port):
     except Exception:
         return
 
-def getStatus(engine_ip,engine_port,container_id):
-    cli=Client(base_url="tcp://"+engine_ip+":"+engine_port)
+def updateContainerStatus(engine_ip,engine_port,container_id):
     try:
+        cli=Client(base_url="tcp://"+engine_ip+":"+engine_port)
         result=cli.inspect_container(container_id)
         state=result['State']
         if state['Running']:
@@ -45,12 +46,54 @@ def getStatus(engine_ip,engine_port,container_id):
     except Exception:
         return "error"
 
-def create():
-    return
+def create(engine_ip,engine_port,imagename,command,entrypoint,container_name,host_name,network_mode,privileged,security_opt,ulimit_nofile,ulimit_noproc,ports,port_bindings,volume,binds,dns_server,hosts,environment):
+    try:
+        cli=Client(base_url="tcp://"+engine_ip+":"+engine_port)
+        
+        host_config=create_host_config(binds=binds,
+                                        port_bindings=port_bindings,
+                                        privileged=privileged,
+                                        network_mode=network_mode,
+                                        security_opt=security_opt,
+                                        extra_hosts=hosts)
+        
+        container = cli.create_container(image=imagename, \
+                                         command=command, \
+                                         entrypoint=entrypoint, \
+                                         hostname=host_name, \
+                                         detach=True, \
+                                         name=container_name, \
+                                         ports=ports, \
+                                         volumes=volume ,\
+                                         environment=environment, \
+                                         host_config=host_config )
+        
+        result=cli.inspect_container(container['Id'])
+        ret={}
+        ret['container_id']=result['Id']
+        ret['container_name']=result['Name']
+        ret['image']=result['Image']
+        ret['created']=result['Created']
+        ret['msg']=container['Warnings']
+        state=result['State']
+        ret['status']="unkonown"
+        if state['Running']:
+            ret['status']="running"
+        elif state['Restarting']:
+            ret['status']="restarting"
+        elif state['Paused']:
+            ret['status']="pause"
+        elif state['Dead']:
+            ret['status']="dead"
+        else:
+            ret['status']="stopped"
+        return ret
+    except Exception:
+        return
 
 def detect(engine_ip,engine_port,container_id):
-    cli=Client(base_url="tcp://"+engine_ip+":"+engine_port)
     try:
+        cli=Client(base_url="tcp://"+engine_ip+":"+engine_port)
         result=cli.inspect_container(container_id)
         ret={}
         ret['container_id']=result['Id']
@@ -68,31 +111,62 @@ def detect(engine_ip,engine_port,container_id):
         elif state['Dead']:
             ret['status']="dead"
         else:
-            ret['status']="stop"
+            ret['status']="stopped"
         return ret
     except Exception:
         return
 
 def inspect_container(engine_ip,engine_port,container_id):
-    cli=Client(base_url="tcp://"+engine_ip+":"+engine_port)
     try:
+        cli=Client(base_url="tcp://"+engine_ip+":"+engine_port)
         result=cli.inspect_container(container_id)
         
         return result
     except Exception:
         return
 
-def start():
-    return
+def pull(engine_ip,engine_port,imagename):
+    try:
+        cli=Client(base_url="tcp://"+engine_ip+":"+engine_port)
+        result=cli.pull(imagename, stream=False,insecure_registry=True)
+        return result
+    except Exception:
+        return
 
-def stop():
-    return
+def start(engine_ip,engine_port,container_id):
+    try:
+        cli=Client(base_url="tcp://"+engine_ip+":"+engine_port)
+        cli.start(container_id)
+    except Exception:
+        return
 
-def kill():
-    return
+def stop(engine_ip,engine_port,container_id):
+    try:
+        cli=Client(base_url="tcp://"+engine_ip+":"+engine_port)
+        cli.stop(container_id,15)
+    except Exception:
+        return
 
-def remove():
-    return
+def kill(engine_ip,engine_port,container_id):
+    try:
+        cli=Client(base_url="tcp://"+engine_ip+":"+engine_port)
+        cli.kill(container_id)
+    except Exception:
+        return
+
+def remove_container(engine_ip,engine_port,container_id):
+    try:
+        cli=Client(base_url="tcp://"+engine_ip+":"+engine_port)
+        cli.remove_container(container_id, False, False, False)
+    except Exception:
+        return
+    
+def remove_image(engine_ip,engine_port,image_id):
+    try:
+        cli=Client(base_url="tcp://"+engine_ip+":"+engine_port)
+        cli.remove_image(image_id, False, True)
+    except Exception:
+        return
 
 def testRegistry(registry_ip,registry_port):
     try:
