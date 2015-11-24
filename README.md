@@ -23,7 +23,7 @@
 > websocket_client (0.32.0)
 
 ### UI Priview:
-![github](http://github.com/qsm365/cmdb/master/preview/1.png "preview1")
-![github](http://github.com/qsm365/cmdb/master/preview/2.png "preview2")
-![github](http://github.com/qsm365/cmdb/master/preview/3.png "preview3")
-![github](http://github.com/qsm365/cmdb/master/preview/4.png "preview4")
+![alt tag](http://github.com/qsm365/cmdb/raw/master/preview/1.png)
+![alt tag](http://github.com/qsm365/cmdb/raw/master/preview/2.png)
+![alt tag](http://github.com/qsm365/cmdb/raw/master/preview/3.png)
+![alt tag](http://github.com/qsm365/cmdb/raw/master/preview/4.png)
