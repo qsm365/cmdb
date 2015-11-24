@@ -3,7 +3,11 @@ from core.models import Host,Resource,IP
 import dockerclient
 
 def create_new(engine_ip,engine_port,host_id,name,description,imagename,command,entrypoint,container_name,host_name,network_mode,privileged,security_opt,ulimit_nofile,ulimit_noproc,ports,port_bindings,volume,binds,dns_server,hosts,environment):
-    containerinfo=dockerclient.create(engine_ip, engine_port, imagename,command,entrypoint,container_name,host_name,network_mode,privileged,security_opt,ulimit_nofile,ulimit_noproc,ports,port_bindings,volume,binds,dns_server,hosts,environment)
+    containerinfo=""
+    try:
+        containerinfo=dockerclient.create(engine_ip, engine_port, imagename,command,entrypoint,container_name,host_name,network_mode,privileged,security_opt,ulimit_nofile,ulimit_noproc,ports,port_bindings,volume,binds,dns_server,hosts,environment)
+    except Exception,ex:
+        return "create failed"+str(Exception)+":"+str(ex)
     if containerinfo:
         app=APPLICATION()
         app.name=name
@@ -25,7 +29,6 @@ def create_new(engine_ip,engine_port,host_id,name,description,imagename,command,
             res.resource_id=app.id
             res.save()
         return "create success"
-    return "create failed:"+str(containerinfo['msg'])
 
 def create_detect(host_id,engine_ip,engine_port,container_id,app_name,app_desc):
     containerinfo=dockerclient.detect(engine_ip, engine_port, container_id)

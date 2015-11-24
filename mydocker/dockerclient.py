@@ -47,7 +47,7 @@ def updateContainerStatus(engine_ip,engine_port,container_id):
         return "error"
 
 def create(engine_ip,engine_port,imagename,command,entrypoint,container_name,host_name,network_mode,privileged,security_opt,ulimit_nofile,ulimit_noproc,ports,port_bindings,volume,binds,dns_server,hosts,environment):
-    try:
+    #try:
         cli=Client(base_url="tcp://"+engine_ip+":"+engine_port)
         
         host_config=create_host_config(binds=binds,
@@ -88,8 +88,8 @@ def create(engine_ip,engine_port,imagename,command,entrypoint,container_name,hos
         else:
             ret['status']="stopped"
         return ret
-    except Exception:
-        return
+    #except Exception,ex:
+    #    return str(Exception,":",ex)
 
 def detect(engine_ip,engine_port,container_id):
     try:
