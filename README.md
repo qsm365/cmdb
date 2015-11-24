@@ -13,17 +13,17 @@
 >and also show the detail of the container through the docker engine api
 
 ### Dependency:
->Django (1.8.1)
->MySQL-python (1.2.5)
->PyYAML (3.11)
->PIL (1.1.6) --with freetype and jpeg
->docker-py (1.2.3)
->requests (2.5.2)
->backports.ssl_match_hostname (3.4.0.2)
->websocket_client (0.32.0)
+> Django (1.8.1)
+> MySQL-python (1.2.5)
+> PyYAML (3.11)
+> PIL (1.1.6) --with freetype and jpeg
+> docker-py (1.2.3)
+> requests (2.5.2)
+> backports.ssl_match_hostname (3.4.0.2)
+> websocket_client (0.32.0)
 
 ### UI Priview:
-![image](http://github.com/qsm365/cmdb/raw/master/preview/1.png)
-![image](http://github.com/qsm365/cmdb/raw/master/preview/2.png)
-![image](http://github.com/qsm365/cmdb/raw/master/preview/3.png)
-![image](http://github.com/qsm365/cmdb/raw/master/preview/4.png)
+![github](http://github.com/qsm365/cmdb/master/preview/1.png "preview1")
+![github](http://github.com/qsm365/cmdb/master/preview/2.png "preview2")
+![github](http://github.com/qsm365/cmdb/master/preview/3.png "preview3")
+![github](http://github.com/qsm365/cmdb/master/preview/4.png "preview4")
