@@ -21,36 +21,36 @@
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Host
           <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="/cmdb/host">Host</a></li>
-            <li><a href="/cmdb/group/type/host">Host Group Manage</a></li>
-            <li><a href="/cmdb/relationship/add">Add Relationship</a></li>
-            <li><a href="/cmdb/relationship/remove">Remove Relationship</a></li>
-            <li><a href="/cmdb/group/parameter/add">Add Group Parameter</a></li>
-            <li><a href="/cmdb/group/parameter/remove">Remove Group Parameter</a></li>
+            <li><a href="{{BASE_URL}}host">Host</a></li>
+            <li><a href="{{BASE_URL}}group/type/host">Host Group Manage</a></li>
+            <li><a href="{{BASE_URL}}relationship/add">Add Relationship</a></li>
+            <li><a href="{{BASE_URL}}relationship/remove">Remove Relationship</a></li>
+            <li><a href="{{BASE_URL}}group/parameter/add">Add Group Parameter</a></li>
+            <li><a href="{{BASE_URL}}group/parameter/remove">Remove Group Parameter</a></li>
           </ul>
         </li>
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Puppet
           <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="/cmdb/config">Config</a></li>
-            <li><a href="/cmdb/group/type/config">Config Group Manage</a></li>
-            <li><a href="/cmdb/report">Report</a></li>
+            <li><a href="{{BASE_URL}}config">Config</a></li>
+            <li><a href="{{BASE_URL}}group/type/config">Config Group Manage</a></li>
+            <li><a href="{{BASE_URL}}report">Report</a></li>
           </ul>
         </li>
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Docker
           <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="/cmdb/application">Application</a></li>
-            <li><a href="/cmdb/image">Image</a></li>
+            <li><a href="{{BASE_URL}}application">Application</a></li>
+            <li><a href="{{BASE_URL}}image">Image</a></li>
           </ul>
         </li>
         
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="#">Welcome: {{request.user.username}}</a></li>
-        <li><a href="/cmdb/logout">Logout</a></li>
+        <li><a href="{{BASE_URL}}logout">Logout</a></li>
       </ul>
     </div>
   </div>

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 {% extends "base.html" %}
 {% block mainbody %}
-<link rel="stylesheet" href="/css/prism.css">
-<script src="/js/prism.js"></script>
+<link rel="stylesheet" href="{{STATIC_URL}}css/prism.css">
+<script src="{{STATIC_URL}}js/prism.js"></script>
 <div class="well" style="margin-left: auto;margin-right: auto;width: 720px;">
     <div class="panel panel-primary">
         <div class="panel-heading">{{title}}
@@ -80,14 +80,14 @@
 <script>
 $(document).ready(function(){
     $("#btn_edit").click(function(){
-        window.location.href="/cmdb/config/edit/{{config.id}}";
+        window.location.href="{{BASE_URL}}config/edit/{{config.id}}";
     });
     $("#btn_dele").click(function(){
         if (confirm('Are you sure?')) {
             $.post(
                 "{{host.id}}",
                 {_method: "delete",csrfmiddlewaretoken: getCookie("csrftoken")},
-                function(data){window.location.href="/cmdb/config";}
+                function(data){window.location.href="{{BASE_URL}}config";}
             )
         };
     });

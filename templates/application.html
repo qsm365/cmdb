@@ -216,14 +216,14 @@ $(document).ready(function(){
             s5=0}
     });
     $("#btn_edit").click(function(){
-        window.location.href="/cmdb/application/edit/{{baseinfo.id}}";
+        window.location.href="{{BASE_URL}}application/edit/{{baseinfo.id}}";
     });
     $("#btn_dele").click(function(){
         if (confirm('This will delete the container info in the CMDB,the real container will not be delete,\nAre you sure?')) {
             $.post(
                 "{{baseinfo.id}}",
                 {_method: "delete",csrfmiddlewaretoken: getCookie("csrftoken")},
-                function(data){window.location.href="/cmdb/application";}
+                function(data){window.location.href="{{BASE_URL}}application";}
             )
         };
     });
@@ -233,7 +233,7 @@ $(document).ready(function(){
             $.post(
                 "{{baseinfo.id}}",
                 {_method: "start",csrfmiddlewaretoken: getCookie("csrftoken")},
-                function(data){window.location.href="/cmdb/application/{{baseinfo.id}}";}
+                function(data){window.location.href="{{BASE_URL}}application/{{baseinfo.id}}";}
             )
         }
     });
@@ -244,7 +244,7 @@ $(document).ready(function(){
             $.post(
                 "{{baseinfo.id}}",
                 {_method: "stop",csrfmiddlewaretoken: getCookie("csrftoken")},
-                function(data){window.location.href="/cmdb/application/{{baseinfo.id}}";}
+                function(data){window.location.href="{{BASE_URL}}application/{{baseinfo.id}}";}
             )
         }
     });

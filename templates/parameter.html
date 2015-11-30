@@ -77,7 +77,7 @@ $(document).ready(function(){
     $("#hostlist2").on('change',function(){
         gid=$('#hostlist2').val()
         $("#table-param2 tbody:last").html('')
-        $.getJSON("/cmdb/parameter/find?groupid="+gid,function(result){
+        $.getJSON("{{BASE_URL}}parameter/find?groupid="+gid,function(result){
             $.each(result, function(i, para){
                 $("#table-param2 tbody:last").append('<tr id="tr_'+para.id+'"><td class="col-sm-1">'+para.ip+'</td><td class="col-sm-1">'+para.key+'</td><td class="col-sm-1">'+para.value+'</td><td class="col-sm-1"><button type="button" class="btn btn-danger nopadding pull-right btn_del" onClick="para_del(\''+para.id+'\')">Del</button></td></tr>');
             });
@@ -103,7 +103,7 @@ $(document).ready(function(){
         });
         var json=JSON.stringify(data)
         $.post(
-            "/cmdb/group/parameter/add",
+            "{{BASE_URL}}group/parameter/add",
             {csrfmiddlewaretoken: getCookie("csrftoken"),groupid:gid,data:json},
             function(data){
 	   	window.location.href="/cmdb"; 
@@ -114,7 +114,7 @@ $(document).ready(function(){
 
 function para_del(id){
     $.post(
-        "/cmdb/group/parameter/remove",
+        "{{BASE_URL}}group/parameter/remove",
         {csrfmiddlewaretoken: getCookie("csrftoken"),pid:id},
         function(data){
             $("#tr_"+id).remove()

@@ -177,7 +177,7 @@
                 <div class="panel-heading" id="panel-report-head"><span class="badge pull-right">{{ppreport.status }}</span>Last Config Report</div>
                 <div class="panel-body collapse" id="panel-report-body">
                 Reported at {{ppreport.time|date:'Y-m-d H:i'}}
-                <a class="btn btn-info nopadding pull-right" href="/cmdb/report/{{ppreport.id}}">Detail</a>
+                <a class="btn btn-info nopadding pull-right" href="{{BASE_URL}}report/{{ppreport.id}}">Detail</a>
                 <table class="table">
                 <thead>
                 <tr>
@@ -306,7 +306,7 @@ $(document).ready(function(){
     });
     $("#btn_save").click(function(){
         $.post(
-            "/cmdb/{{host.id}}", 
+            "{{BASE_URL}}{{host.id}}", 
             { _method: "edit_desc", desc: $("#input_desc").val(), csrfmiddlewaretoken: getCookie("csrftoken") },
             function(data){
                 $("#btn_save").addClass('hide');
@@ -322,7 +322,7 @@ $(document).ready(function(){
             $.post(
                 "{{host.id}}",
                 {_method: "delete",csrfmiddlewaretoken: getCookie("csrftoken")},
-                function(data){window.location.href="/cmdb/host";}
+                function(data){window.location.href="{{BASE_URL}}host";}
             )
         };
     });

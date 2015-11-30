@@ -283,7 +283,7 @@ $('#id_next1').click(function(){
     ip=sel.split(',')[1]
     hostid=sel.split(',')[0]
     port=$('#id_host_port').val()
-    $.getJSON("/cmdb/application/ping?ip="+ip+"&port="+port,function(result){
+    $.getJSON("{{BASE_URL}}application/ping?ip="+ip+"&port="+port,function(result){
         if(result['result']=='ok'){
             $("#id_next1").addClass('hide');
             $("#id_next2").removeClass('hide');
@@ -355,7 +355,7 @@ $('#id_finish').click(function(){
                 function(data2){
                     if(data2['result']=='ok'){
                         alert(data2['msg'])
-                        window.location.href="/cmdb/application"
+                        window.location.href="{{BASE_URL}}application"
                     }else{
                         alert('CREATE ERROR!')
                     }
@@ -388,7 +388,7 @@ $('#id_host_search').on
 {
 $('#id_host_select').html("")
 if($('#id_host_search').val().length>=3){
-    $.getJSON("/cmdb/host/find?q="+$('#id_host_search').val(),function(result){
+    $.getJSON("{{BASE_URL}}host/find?q="+$('#id_host_search').val(),function(result){
         $.each(result, function(i, hostinfo){
             //console.log("i:"+hostinfo.id+";field:"+hostinfo.ip)
             $('#id_host_select').append($('<option>', 

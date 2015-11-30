@@ -69,7 +69,7 @@ $(document).ready(function(){
             $.post(
                 "{{baseinfo.id}}",
                 {_method: "delete",csrfmiddlewaretoken: getCookie("csrftoken")},
-                function(data){window.location.href="/cmdb/image";}
+                function(data){window.location.href="{{BASE_URL}}image";}
             )
         };
     });

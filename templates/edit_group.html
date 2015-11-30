@@ -83,7 +83,7 @@ $('#id_host_search').on
 {
 $('#id_select').html("")
 if($('#id_host_search').val().length>=3){
-    $.getJSON("/cmdb/host/find?q="+$('#id_host_search').val(),function(result){
+    $.getJSON("{{BASE_URL}}host/find?q="+$('#id_host_search').val(),function(result){
         $.each(result, function(i, hostinfo){
             //console.log("i:"+hostinfo.id+";field:"+hostinfo.ip)
             $('#id_select').append($('<option>', 
@@ -101,7 +101,7 @@ $('#id_config_search').on
 {
 $('#id_select').html("")
 if($('#id_config_search').val().length>=3){
-    $.getJSON("/cmdb/config/find?q="+$('#id_config_search').val(),function(result){
+    $.getJSON("{{BASE_URL}}config/find?q="+$('#id_config_search').val(),function(result){
         $.each(result, function(i, configinfo){
             $('#id_select').append($('<option>', 
                 {
@@ -144,9 +144,9 @@ $('#id_save').click(function(){
     if($('#id_name').val().length>0){
         name=$('#id_name').val()
         $.post(
-                "/cmdb/group/{{group.id}}",
+                "{{BASE_URL}}group/{{group.id}}",
                 {_method: "edit",csrfmiddlewaretoken: getCookie("csrftoken"),name:name,add:add_list.toString(),del:del_list.toString()},
-                function(data){window.location.replace("/cmdb/group/{{group.id}}");}
+                function(data){window.location.replace("{{BASE_URL}}group/{{group.id}}");}
             )
     }
 });

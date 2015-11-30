@@ -110,7 +110,7 @@ $('#id_host_search').on
 {
 $('#id_host_select').html("")
 if($('#id_host_search').val().length>=3){
-    $.getJSON("/cmdb/host/find?q="+$('#id_host_search').val(),function(result){
+    $.getJSON("{{BASE_URL}}host/find?q="+$('#id_host_search').val(),function(result){
         $.each(result, function(i, hostinfo){
             //console.log("i:"+hostinfo.id+";field:"+hostinfo.ip)
             $('#id_host_select').append($('<option>', 
@@ -129,7 +129,7 @@ $('#id_config_search').on
 {
 $('#id_config_select').html("")
 if($('#id_config_search').val().length>=3){
-    $.getJSON("/cmdb/config/find?q="+$('#id_config_search').val(),function(result){
+    $.getJSON("{{BASE_URL}}config/find?q="+$('#id_config_search').val(),function(result){
         $.each(result, function(i, configinfo){
             $('#id_config_select').append($('<option>', 
                 {
@@ -192,9 +192,9 @@ $('#id_finish').click(function(){
         });
 
         $.post( 
-		"/cmdb/group", 
+		"{{BASE_URL}}group", 
 		{ _method:"new",name: $('#id_name').val(),type: $('#id_type').val(),member: member_list, csrfmiddlewaretoken: getCookie("csrftoken") },
-		function(data){window.location.href="/cmdb/group/"
+		function(data){window.location.href="{{BASE_URL}}group/"
 	});
     }else{
         member_list="";
@@ -203,9 +203,9 @@ $('#id_finish').click(function(){
         });
         
         $.post( 
-		"/cmdb/group", 
+		"{{BASE_URL}}group", 
 		{ _method:"new",name: $('#id_name').val(),type: $('#id_type').val(),member: member_list, csrfmiddlewaretoken: getCookie("csrftoken") },
-		function(data){window.location.href="/cmdb/group/"
+		function(data){window.location.href="{{BASE_URL}}group/"
 	});
     }
 

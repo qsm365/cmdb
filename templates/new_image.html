@@ -60,7 +60,7 @@ $('#id_host_search').on
 {
 $('#id_host_select').html("")
 if($('#id_host_search').val().length>=3){
-    $.getJSON("/cmdb/host/find?q="+$('#id_host_search').val(),function(result){
+    $.getJSON("{{BASE_URL}}host/find?q="+$('#id_host_search').val(),function(result){
         $.each(result, function(i, hostinfo){
             //console.log("i:"+hostinfo.id+";field:"+hostinfo.ip)
             $('#id_host_select').append($('<option>', 
@@ -92,11 +92,11 @@ $('#id_next').click(function(){
     ip=sel.split(',')[1]
     hostid=sel.split(',')[0]
     port=$('#id_host_port').val()
-    $.getJSON("/cmdb/image/ping?ip="+ip+"&port="+port,function(result){
+    $.getJSON("{{BASE_URL}}image/ping?ip="+ip+"&port="+port,function(result){
         if(result['result']=='ok'){
             $("#id_next").addClass('hide');
             $("#id_finish").removeClass('hide');
-            $.getJSON("/cmdb/image/tags?ip="+ip+"&port="+port,function(result){
+            $.getJSON("{{BASE_URL}}image/tags?ip="+ip+"&port="+port,function(result){
                 $.each(result, function(i, image){
                     $('#id_image_select').append($('<option>', 
                     {
@@ -120,7 +120,7 @@ $('#id_finish').click(function(){
             {csrfmiddlewaretoken:getCookie("csrftoken"),ip:ip,port:port,image_id:image_id,repository:repository,tag:tag},
             function(data){
                 if(data['result']=='ok'){
-                    window.location.href="/cmdb/image"
+                    window.location.href="{{BASE_URL}}image"
                 }else{
                     alert('ERROR!')
                 }

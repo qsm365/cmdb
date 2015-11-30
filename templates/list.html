@@ -11,15 +11,15 @@
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <li><a href="/cmdb/{{uri}}">All</a></li>
+                <li><a href="{{BASE_URL}}{{uri}}">All</a></li>
             {% for g in grouplist %}
-                <li><a href="/cmdb/{{uri}}/group/{{g.id}}">{{g.name}}</a></li>
+                <li><a href="{{BASE_URL}}{{uri}}/group/{{g.id}}">{{g.name}}</a></li>
             {% endfor %}
             </ul>
         </span>
         {% endif %}
         {% if with_new %}
-        <a class="btn btn-warning nopadding" href="/cmdb/{{uri}}/new">New</a>
+        <a class="btn btn-warning nopadding" href="{{BASE_URL}}{{uri}}/new">New</a>
         {% endif %}
         {% if not nosearch %}
         <button id="btn_search" type="button" class="btn btn-success nopadding pull-right">Search</button>

@@ -44,14 +44,14 @@ $(document).ready(function(){
     $("#btn_dele").click(function(){
         if (confirm('Are you sure?')) {
             $.post(
-                "/cmdb/group/{{group.id}}",
+                "{{BASE_URL}}group/{{group.id}}",
                 {_method: "delete",csrfmiddlewaretoken: getCookie("csrftoken")},
-                function(data){window.location.replace("/cmdb/group");}
+                function(data){window.location.replace("{{BASE_URL}}group");}
             )
         };
     });
     $("#btn_edit").click(function(){
-        window.location.replace("/cmdb/group/edit/{{group.id}}");
+        window.location.replace("{{BASE_URL}}group/edit/{{group.id}}");
     });
 });
 

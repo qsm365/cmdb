@@ -42,9 +42,9 @@ $('#id_finish').click(function(){
 if($('#id_name').val().length>0){
 
     $.post(
-        "/cmdb/application/{{baseinfo.id}}", 
+        "{{BASE_URL}}application/{{baseinfo.id}}", 
         { _method:"{{meth}}",name: $('#id_name').val(),description: $('#id_description').val(), csrfmiddlewaretoken: getCookie("csrftoken") },
-        function(data){window.location.href="/cmdb/application/{{baseinfo.id}}"}
+        function(data){window.location.href="{{BASE_URL}}application/{{baseinfo.id}}"}
     );
     
 }else{

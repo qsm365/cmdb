@@ -58,9 +58,9 @@ $('#id_classname').on('input',function(){
 $('#id_finish').click(function(){
 if($('#id_name').val().length>0 && $('#id_classname').val().length>0){
     $.post( 
-        "/cmdb/config/{{config.id}}", 
+        "{{BASE_URL}}config/{{config.id}}", 
         { _method:"{{meth}}",name: $('#id_name').val(),description: $('#id_description').val(),classname: $('#id_classname').val(), csrfmiddlewaretoken: getCookie("csrftoken") },
-        function(data){window.location.href="/cmdb/config/{{config.id}}"}
+        function(data){window.location.href="{{BASE_URL}}config/{{config.id}}"}
     );
 }else{
     if($('#id_name').val().length<=0){
