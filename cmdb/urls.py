@@ -18,6 +18,7 @@ from django.contrib import admin
 from core.views import *
 from puppet.views import *
 from mydocker.views import *
+from openstack.views import *
 
 baseurl="^cmdb"
 
@@ -70,5 +71,10 @@ urlpatterns = [
     url(baseurl+'/image[/]?(\d{1,11})?$',images),
     url(baseurl+'/image/new$',new_image),
     url(baseurl+'/image/ping$',ping_registry),
-    url(baseurl+'/image/tags',list_images)
+    url(baseurl+'/image/tags',list_images),
+    
+    url(baseurl+'/nova[/]?(\d{1,11})?$',nova),
+    url(baseurl+'/hypervisor[/]?(\d{1,11})?$',hypervisor),
+    url(baseurl+'/cinder[/]?(\d{1,11})?$',cinder),
+    url(baseurl+'/glance[/]?(\d{1,11})?$',glance),
 ]
