@@ -23,7 +23,7 @@ def serverDetail(uri,serverid,tokenid):
     result=requests.get(url,headers=headers)
     if result.status_code in [200,203]:
         re = result.json()
-        return re
+        return re['server']
     else:
         return result.status_code
         
