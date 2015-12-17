@@ -27,10 +27,79 @@ def serverDetail(uri,serverid,tokenid):
     else:
         return result.status_code
         
-#def createServer(url,tokenid):
+def createServer(uri,name,flavorid,volumeid,networkid,fixip,keyname,tokenid,**args):
+    url=uri+"/servers"
+    headers['X-Auth-Token']=tokenid
+    data={}
+    server=args
+    server['name']=name
+    server['flavorRef']=flavorid
+    block_device_mapping_v2=[]
+    device={}
+    device['device_name']='/dev/vda'
+    device['source_type']='volume'
+    device['destination_type']='volume'
+    device['uuid']=volumeid
+    device['boot_index']='0'
+    block_device_mapping_v2.append(device)
+    server['block_device_mapping_v2']=block_device_mapping_v2
+    networks=[]
+    network={}
+    network['uuid']=networkid
+    network['fixed_ip']=fixip
+    networks.append(network)
+    server['networks']=networks
+    server['key_name']=keyname
+    data['server']=server
+    result=requests.post(url,data=json.dumps(data),headers=headers)
+    if result.status_code in [200,202]:
+        re=result.json()
+        return re
+    else:
+        return result.status_code
  
-#def deleteServer(uri,sid,tokenid):
-            
+def deleteServer(uri,serverid,tokenid):
+    url=uri+"/servers/"+str(serverid)
+    headers['X-Auth-Token']=tokenid
+    result=requests.delete(url,headers=headers)
+    if result.status_code in [200,204]:
+        return "ok"
+    else:
+        return result.status_code
+    
+def forceDeleteServer(uri,serverid,tokenid):
+    url=uri+"/servers/"+str(serverid)+"/action"
+    headers['X-Auth-Token']=tokenid
+    data={}
+    data['forceDelete']=None
+    result=requests.post(url,data=json.dumps(data),headers=headers)
+    if result.status_code in [200,202]:
+        return "ok"
+    else:
+        return result.status_code
+
+def startServer(uri,serverid,tokenid):
+    url=uri+"/servers/"+str(serverid)
+    headers['X-Auth-Token']=tokenid
+    data={}
+    data['os-start']=None
+    result=requests.post(url,data=json.dumps(data),headers=headers)
+    if result.status_code in [200,202]:
+        return "ok"
+    else:
+        return result.status_code
+    
+def stopServer(uri,serverid,tokenid):
+    url=uri+"/servers/"+str(serverid)
+    headers['X-Auth-Token']=tokenid
+    data={}
+    data['os-stop']=None
+    result=requests.post(url,data=json.dumps(data),headers=headers)
+    if result.status_code in [200,202]:
+        return "ok"
+    else:
+        return result.status_code
+
 def listFlavors(uri,tokenid):
     url=uri+"/flavors"
     headers['X-Auth-Token']=tokenid
