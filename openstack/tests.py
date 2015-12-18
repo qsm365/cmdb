@@ -1,10 +1,10 @@
 from django.test import TestCase
-import identity
+from openstack import identityapi
 
 # Create your tests here.
 if __name__=='__main__':
     print "test authenticate"
-    r=identity.authenticate('40.40.40.187',5000,'admin','admin','secrete')
+    r=identityapi.authenticate('40.40.40.187',5000,'admin','admin','secrete')
     print r['tokenId']
     print r['expires']
     print r['tenantId']

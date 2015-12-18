@@ -65,7 +65,7 @@ def configs(request,configid=0,groupid=0):
             context['config']=config.show(configid)
             context['ppfile']=config.ppfile(configid)
             context['host']=config.hostsWithConfig(configid)
-            return render(request, 'config.html',context)
+            return render(request, 'puppet/config.html',context)
 
 @login_required
 def parameters(request,function):
@@ -88,20 +88,20 @@ def parameters(request,function):
             context['title']="Add Group Parameter"
             context['function']=function
             context['hostlist']=group.listByType("Host")
-            return render(request,'parameter.html',context)
+            return render(request,'puppet/parameter.html',context)
         elif function=='remove':
             context={}
             context['title']="Remove Group Parameter"
             context['function']=function
             context['hostlist']=group.listByType("Host")
-            return render(request,'parameter.html',context)
+            return render(request,'puppet/parameter.html',context)
 
 @login_required
 def reports(request,report_id=0,groupid=0):
     if report_id:
         context=report.show(report_id)
         context['title']="Report Detail"
-        return render(request,'report.html',context)
+        return render(request,'puppet/report.html',context)
     else:
         context={}
         p=int(request.GET.get('page',1))
@@ -145,7 +145,7 @@ def new_config(request):
     context={}
     context['title']="Create Config"
     context['meth']="new"
-    return render(request,'new_edit_config.html',context)
+    return render(request,'puppet/new_edit_config.html',context)
 
 @login_required
 def edit_config(request,configid=0):
@@ -155,7 +155,7 @@ def edit_config(request,configid=0):
         context['title']="Config Edit"
         context['config']=re
         context['meth']="edit"
-        return render(request, 'new_edit_config.html',context)
+        return render(request, 'puppet/new_edit_config.html',context)
     else:
         return HttpResponseRedirect("/cmdb/config")
 

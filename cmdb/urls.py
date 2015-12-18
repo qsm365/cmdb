@@ -73,8 +73,8 @@ urlpatterns = [
     url(baseurl+'/image/ping$',mydocker.views.ping_registry),
     url(baseurl+'/image/tags',mydocker.views.list_images),
     
-    url(baseurl+'/nova[/]?(\d{1,11})?$',openstack.views.nova),
-    url(baseurl+'/hypervisor[/]?(\d{1,11})?$',openstack.views.hypervisor),
-    url(baseurl+'/cinder[/]?(\d{1,11})?$',openstack.views.cinder),
-    url(baseurl+'/glance[/]?(\d{1,11})?$',openstack.views.glance),
+    url(baseurl+'/nova[/]?(........-....-....-....-............)?$',openstack.views.vm),
+    url(baseurl+'/hypervisor[/]?(........-....-....-....-............)?$',openstack.views.hypervisor),
+    url(baseurl+'/cinder[/]?(........-....-....-....-............)?$',openstack.views.volume),
+    url(baseurl+'/glance[/]?(........-....-....-....-............)?$',openstack.views.image),
 ]

@@ -26,8 +26,8 @@ def applications(request,appid=0):
             else:
                 context['page']=page.page(1)
             context['num_pages']=page.num_pages
-            for p in context['page']:
-                p.setUrl("/cmdb/application/"+str(p.id))
+            for pa in context['page']:
+                pa.setUrl("/cmdb/application/"+str(pa.id))
         context['uri']='application'
         context['with_group']=False
         context['with_new']=True
@@ -68,7 +68,7 @@ def applications(request,appid=0):
                 context['title']="Applications Info"
                 context['baseinfo']=re
                 context['inspect']=inspect
-                return render(request, 'application.html',context)
+                return render(request, 'docker/application.html',context)
             else:
                 return HttpResponseRedirect("/cmdb/application")
 
@@ -91,8 +91,8 @@ def images(request,imgid=0):
             else:
                 context['page']=page.page(1)
             context['num_pages']=page.num_pages
-            for p in context['page']:
-                p.setUrl("/cmdb/image/"+str(p.id))
+            for pa in context['page']:
+                pa.setUrl("/cmdb/image/"+str(pa.id))
         context['uri']='image'
         context['with_group']=False
         context['with_new']=True
@@ -110,13 +110,13 @@ def images(request,imgid=0):
                 context['title']="Image Info"
                 context['baseinfo']=re
                 context['apps']=image.getAppByImage(re.id)
-                return render(request, 'image.html',context)
+                return render(request, 'docker/image.html',context)
 
 @login_required
 def new_application(request):
     context={}
     context['title']="New Application"
-    return render(request,'new_application.html',context)
+    return render(request,'docker/new_application.html',context)
 
 @login_required
 def create_application(request):
@@ -124,7 +124,7 @@ def create_application(request):
         context={}
         context['title']="Create Application"
         context['images']=image.showAll()
-        return render(request,'create_application.html',context)
+        return render(request,'docker/create_application.html',context)
     elif request.method == 'POST':
         meth=request.POST['meth']
         ip=request.POST['ip']
@@ -228,7 +228,7 @@ def detect_application(request):
         context={}
         context['title']="Detect Application"
         context['meth']="new"
-        return render(request,'detect_application.html',context)
+        return render(request,'docker/detect_application.html',context)
     elif request.method == 'POST':
         engine_ip=request.POST['ip']
         host_id=request.POST['hostid']
@@ -250,7 +250,7 @@ def edit_application(request,appid=0):
         context['title']="Edit Application"
         context['baseinfo']=re
         context['meth']="edit"
-        return render(request,'edit_application.html',context)
+        return render(request,'docker/edit_application.html',context)
     else:
         return HttpResponseRedirect("/cmdb/application")
         
@@ -260,7 +260,7 @@ def new_image(request):
         context={}
         context['title']="Create Image"
         context['meth']="new"
-        return render(request,'new_image.html',context)
+        return render(request,'docker/new_image.html',context)
     elif request.method == 'POST':
         registry_ip=request.POST['ip']
         registry_port=request.POST['port']

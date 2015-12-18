@@ -1,21 +1,40 @@
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseRedirect
 from django.shortcuts import render
+from django.core.paginator import Paginator
+import nova
 
 # Create your views here.
-def nova(request,vmid=0):
+def vm(request,vmid=0):
     if not vmid:
         context={}
+        p=int(request.GET.get('page',1))
+        re=nova.listInstances()()
         context['title']="Nova VM List"
+        if re:
+            page=Paginator(re,10)
+            if p>0 and p<=page.num_pages:
+                context['page']=page.page(p)
+            else:
+                context['page']=page.page(1)
+            context['num_pages']=page.num_pages
+            for pa in context['page']:
+                pa['url']="/cmdb/nova/"+str(pa.id)
         context['uri']='nova'
         context['with_group']=True
         context['with_new']=True
+        context['nosearch']=True
         return render(request, 'list.html',context)
     else:
         if request.method=='POST':
             return HttpResponse("ok")
         else:
-            context={}
-            return render(request, 'nova.html',context)
+            re=nova.show(vmid)
+            if re:
+                context=re
+                context['title']="Nova Info"
+                return render(request, 'nova/vm.html',context)
+            else:
+                return HttpResponseRedirect("/cmdb/nova")
 
 def hypervisor(request,hvid=0):
     if not hvid:
@@ -30,9 +49,9 @@ def hypervisor(request,hvid=0):
             return HttpResponse("ok")
         else:
             context={}
-            return render(request, 'nova.html',context)
+            return render(request, 'openstack/nova.html',context)
 
-def cinder(request,volid=0):
+def volume(request,volid=0):
     if not volid:
         context={}
         context['title']="Cinder List"
@@ -45,9 +64,9 @@ def cinder(request,volid=0):
             return HttpResponse("ok")
         else:
             context={}
-            return render(request, 'cinder.html',context)
+            return render(request, 'openstack/cinder.html',context)
     
-def glance(request,imgid=0):
+def image(request,imgid=0):
     if not imgid:
         context={}
         context['title']="Glance List"
@@ -60,4 +79,4 @@ def glance(request,imgid=0):
             return HttpResponse("ok")
         else:
             context={}
-            return render(request, 'glance.html',context)
+            return render(request, 'openstack/glance.html',context)

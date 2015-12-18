@@ -26,6 +26,5 @@ def authenticate(ksIP,ksPort,tenant,user,passwd):
             serviceCatalog[sc['name']]=sc['endpoints'][0]['publicURL']
         r['serviceCatalog']=serviceCatalog
         return r
-    else:
-        print result.status_code
-        print result.raw
+    #else:
+    #    return result.status_code

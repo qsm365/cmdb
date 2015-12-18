@@ -81,7 +81,7 @@ def hosts(request,hostid=0,groupid=0):
             if re:
                 context=re
                 context['title']="Host Info"
-                return render(request, 'host.html',context)
+                return render(request, 'core/host.html',context)
             else:
                 return HttpResponseRedirect("/cmdb/host")
 
@@ -151,7 +151,7 @@ def groups(request,groupid=0,grouptype=""):
                 if context['group'].type=="Host":
                     for p in context['members']:
                         p.setIP(host.getIP(p.id))
-                return render(request,'group.html',context)
+                return render(request,'core/group.html',context)
             else:
                 return HttpResponseRedirect("/cmdb/group")
 
@@ -243,7 +243,7 @@ def relationship(request,function,functype=''):
         context['configlist']=config.showAll()
         context['hostgrouplist']=group.listByType("Host")
         context['configgrouplist']=group.listByType("CONFIG")
-        return render(request,'relationship.html',context)
+        return render(request,'core/relationship.html',context)
    
 @login_required
 def home(request):
@@ -257,7 +257,7 @@ def new_group(request):
     context['title']="Create Group"
     context['type']=["Host","CONFIG"]
     context['meth']='new'
-    return render(request,'new_group.html',context)
+    return render(request,'core/new_group.html',context)
 
 @login_required
 def edit_group(request,groupid=0):
@@ -270,7 +270,7 @@ def edit_group(request,groupid=0):
         if context['group'].type=="Host":
             for p in context['members']:
                 p.setIP(host.getIP(p.id))
-        return render(request, 'edit_group.html',context)
+        return render(request, 'core/edit_group.html',context)
     else:
         return HttpResponseRedirect("/cmdb/group")
 
