@@ -8,7 +8,7 @@ def vm(request,vmid=0):
     if not vmid:
         context={}
         p=int(request.GET.get('page',1))
-        re=nova.listInstances()()
+        re=nova.listInstances()
         context['title']="Nova VM List"
         if re:
             page=Paginator(re,10)
@@ -18,7 +18,7 @@ def vm(request,vmid=0):
                 context['page']=page.page(1)
             context['num_pages']=page.num_pages
             for pa in context['page']:
-                pa['url']="/cmdb/nova/"+str(pa.id)
+                pa['url']="/cmdb/nova/"+str(pa['id'])
         context['uri']='nova'
         context['with_group']=True
         context['with_new']=True
@@ -28,11 +28,12 @@ def vm(request,vmid=0):
         if request.method=='POST':
             return HttpResponse("ok")
         else:
-            re=nova.show(vmid)
+            re=nova.showInstances(vmid)
             if re:
                 context=re
-                context['title']="Nova Info"
-                return render(request, 'nova/vm.html',context)
+                context['title']="VM Instance Info"
+                context['vm']=re
+                return render(request, 'openstack/vm.html',context)
             else:
                 return HttpResponseRedirect("/cmdb/nova")
 
@@ -49,7 +50,7 @@ def hypervisor(request,hvid=0):
             return HttpResponse("ok")
         else:
             context={}
-            return render(request, 'openstack/nova.html',context)
+            return render(request, 'openstack/hypervisor.html',context)
 
 def volume(request,volid=0):
     if not volid:

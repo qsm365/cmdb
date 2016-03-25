@@ -1,39 +1,33 @@
-import novaapi
-import identityapi
+from novaclient import client
 
-ksIP=''
-ksPort=''
-tenant=''
-user=''
-passwd=''
+api_ver = '2'
+auth_url='http://controller:5000/v2.0'
+tenant='admin'
+user='admin'
+passwd='asdf3.14'
 
 def listInstances():
-    r=identityapi.authenticate(ksIP, ksPort, tenant, user, passwd)
-    if r:
-        tokenid=r['tokenId']
-        if r['serviceCatalog']['nova']:
-            uri=r['serviceCatalog']['nova']
-            servers=novaapi.listServers(uri, tokenid)
-            return servers
-        
-def listInstancesByHV(hv):
-    r=identityapi.authenticate(ksIP, ksPort, tenant, user, passwd)
-    if r:
-        tokenid=r['tokenId']
-        if r['serviceCatalog']['nova']:
-            uri=r['serviceCatalog']['nova']
-            servers=novaapi.listServers(uri, tokenid)
-            result=[]
-            for server in servers:
-                if server['hv']==hv:
-                    result.append(server)
-            return result
-        
-def show(vmid):
-    r=identityapi.authenticate(ksIP, ksPort, tenant, user, passwd)
-    if r:
-        tokenid=r['tokenId']
-        if r['serviceCatalog']['nova']:
-            uri=r['serviceCatalog']['nova']
-            servers=novaapi.serverDetail(uri, vmid, tokenid)
-            return servers
+    nc = client.Client(api_ver, user, passwd, tenant,
+                       auth_url, connection_pool=True)
+    r=[]
+    for server in list(nc.servers.list()):
+        s=translateServer(server);
+        r.append(s)
+    return r
+
+def showInstances(instanceId):
+    nc = client.Client(api_ver, user, passwd, tenant,
+                       auth_url, connection_pool=True)
+    server = nc.servers.get(instanceId)
+    return translateServer(server);
+
+def translateServer(server):
+    s = server.to_dict();
+    s['hypervisor'] = s['OS-EXT-SRV-ATTR:host']
+    return s
+
+def getFlavor(instanceId):
+    nc = client.Client(api_ver, user, passwd, tenant,
+                       auth_url, connection_pool=True)
+    flavor = nc.flavors.get(instanceId)
+    return flavor.to_dict()

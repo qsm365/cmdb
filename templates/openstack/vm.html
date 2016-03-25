@@ -1,8 +1,153 @@
 <!DOCTYPE html>
 {% extends "base.html" %}
 {% block mainbody %}
-
+{% load customtag %}
+<div class="well" style="margin-left: auto;margin-right: auto;width: 720px;">
+    <div class="panel panel-primary">
+        <div class="panel-heading">{{title}}
+            <button type="button" class="btn btn-danger pull-right nopadding" id="btn_dele">Terminate</button>
+        </div>
+        <div class="panel-body">
+            <table class="table">
+            <tbody>
+            <tr class="info">
+                <td>Instance Name</td>
+                <td>{{vm.name}}</td>
+            </tr>
+            <tr>
+                <td>Instance Id</td>
+                <td>{{vm.id}}</td>
+            </tr>
+            <tr class="info">
+                <td>Created</td>
+                <td>{{vm.created}}</td>
+            </tr>
+            <tr>
+                <td>Hypervisor Host</td>
+                <td>{{vm.hypervisor}}</td>
+            </tr>
+            </tbody>
+            </table>
+            
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="panel-flavor-head"><span class="badge pull-right">{{vm.flavor.id|getFlavor|lookup:'name'}}</span>Flavor Info</div>
+                <div class="panel-body collapse" id="panel-flavor-body">
+                    <table class="table">
+                    <tbody>
+                    <tr class="info">
+                        <td class="col-sm-1">Id</td>
+                        <td class="col-sm-2">{{vm.flavor.id}}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-1">vCPU</td>
+                        <td class="col-sm-2">{{vm.flavor.id|getFlavor|lookup:'vcpus'}}</td>
+                    </tr>
+                    <tr class="info">
+                        <td class="col-sm-1">Memory</td>
+                        <td class="col-sm-2">{{vm.flavor.id|getFlavor|lookup:'ram'}}MB</td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-1">Root Disk</td>
+                        <td class="col-sm-2">{{vm.flavor.id|getFlavor|lookup:'disk'}}GB</td>
+                    </tr>
+                    <tr class="info">
+                        <td class="col-sm-1">Extra Disk</td>
+                        <td class="col-sm-2">{{vm.flavor.id|getFlavor|lookup:'OS-FLV-EXT-DATA:ephemeral'}}GB</td>
+                    </tr>
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="panel-image-head"><span class="badge pull-right">{{vm.image.id|getImage|lookup:'name'}}</span>Image Info</div>
+                <div class="panel-body collapse" id="panel-image-body">
+                    <table class="table">
+                    <tbody>
+                    <tr class="info">
+                        <td class="col-sm-1">Id</td>
+                        <td class="col-sm-2">{{vm.image.id}}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-1">Created</td>
+                        <td class="col-sm-2">{{vm.image.id|getImage|lookup:'created_at'}}</td>
+                    </tr>
+                    <tr class="info">
+                        <td class="col-sm-1">Size</td>
+                        <td class="col-sm-2">{{vm.image.id|getImage|lookup:'size'|addUnit}}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-1">Disk Format</td>
+                        <td class="col-sm-2">{{vm.image.id|getImage|lookup:'disk_format'}}</td>
+                    </tr>
+                    <tr class="info">
+                        <td class="col-sm-1">Container Format</td>
+                        <td class="col-sm-2">{{vm.image.id|getImage|lookup:'container_format'}}</td>
+                    </tr>
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+            {% for key,val in vm.addresses.items %}
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="panel-network-head"><span class="badge pull-right">{{key}}</span>Network Info</div>
+                <div class="panel-body collapse" id="panel-network-body">
+                    {% for n in val %}
+                    <table class="table">
+                    <tbody>
+                    <tr class="info">
+                        <td class="col-sm-1">Type</td>
+                        <td class="col-sm-2">{{n|lookup:'OS-EXT-IPS:type'}}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-sm-1">IP Address</td>
+                        <td class="col-sm-2">{{n.addr}}</td>
+                    </tr>
+                    <tr class="info">
+                        <td class="col-sm-1">MAC</td>
+                        <td class="col-sm-2">{{n|lookup:'OS-EXT-IPS-MAC:mac_addr'}}</td>
+                    </tr>
+                    </tbody>
+                    </table>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>    
+    </div>
+</div>
+            
 <script>
+$(document).ready(function(){
+    $(".collapse").collapse('hide');
+    s1=0;
+    s2=0;
+    s3=0;
+    $("#panel-flavor-head").click(function(){
+        if(s1==0){
+            $("#panel-flavor-body").collapse('show');
+            s1=1}
+        else{
+            $("#panel-flavor-body").collapse('hide');
+            s1=0}
+    });
+    $("#panel-image-head").click(function(){
+        if(s2==0){
+            $("#panel-image-body").collapse('show');
+            s2=1}
+        else{
+            $("#panel-image-body").collapse('hide');
+            s2=0}
+    });
+    $("#panel-network-head").click(function(){
+        if(s3==0){
+            $("#panel-network-body").collapse('show');
+            s3=1}
+        else{
+            $("#panel-network-body").collapse('hide');
+            s3=0}
+    });
+});
 function getCookie(name) { var cookieValue = null;if (document.cookie && document.cookie != '') {var cookies = document.cookie.split(';');for (var i = 0; i < cookies.length; i++) {var cookie = jQuery.trim(cookies[i]);if (cookie.substring(0, name.length + 1) == (name + '=')) {cookieValue = decodeURIComponent(cookie.substring(name.length + 1));break;}}}return cookieValue;}
 </script>
 <style>

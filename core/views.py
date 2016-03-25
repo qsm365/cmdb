@@ -333,6 +333,6 @@ def captcha(request):
     # store the content in Django's session store
     buf = cStringIO.StringIO()
     # a memory buffer used to store the generated image
-    image.save(buf, 'jpeg')
-    return HttpResponse(buf.getvalue(), 'image/jpeg')
+    image.save(buf, 'gif')
+    return HttpResponse(buf.getvalue(), 'image/gif')
     # return the image data stream as image/jpeg format, browser will treat it as an image

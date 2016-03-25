@@ -16,11 +16,13 @@
 > Django (1.8.1)</br>
 > MySQL-python (1.2.5)</br>
 > PyYAML (3.11)</br>
-> PIL (1.1.6) --with freetype and jpeg</br>
+> PIL (1.1.6) --with freetype</br>
 > docker-py (1.2.3)</br>
 > requests (2.5.2)</br>
 > backports.ssl_match_hostname (3.4.0.2)</br>
-> websocket_client (0.32.0)
+> websocket_client (0.32.0)</br>
+> python-openstackclient (2.2.0)</br>
+> python-dateutil (2.5.1)</br>
 
 ### UI Priview:
 ![3](https://raw.github.com/qsm365/cmdb/master/preview/3.png "the host list")</br></br>
