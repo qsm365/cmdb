@@ -170,7 +170,7 @@ def remove_image(engine_ip,engine_port,image_id):
 
 def testRegistry(registry_ip,registry_port):
     try:
-        r=requests.get('http://'+registry_ip+":"+registry_port+"/v1/_ping")
+        r=requests.get('http://'+registry_ip+":"+registry_port+"/v1/_ping",timeout=5)
         if r.status_code==200:
             return True
         else:
@@ -180,13 +180,13 @@ def testRegistry(registry_ip,registry_port):
     
 def showAllRegistryTag(registry_ip,registry_port):
     try:
-        r=requests.get('http://'+registry_ip+":"+registry_port+"/v1/search?q=")
+        r=requests.get('http://'+registry_ip+":"+registry_port+"/v1/search?q=",timeout=5)
         if r.status_code==200:
             result=[]
             re=r.json()
             repos=re['results']
             for repo in repos:
-                r=requests.get('http://'+registry_ip+":"+registry_port+"/v1/repositories/"+repo['name']+"/tags")
+                r=requests.get('http://'+registry_ip+":"+registry_port+"/v1/repositories/"+repo['name']+"/tags",timeout=5)
                 re=r.json()
                 for k,v in re.items():
                     t={}
@@ -200,7 +200,7 @@ def showAllRegistryTag(registry_ip,registry_port):
 
 def showRegistryImage(registry_ip,registry_port,image_id):
     try:
-        r=requests.get('http://'+registry_ip+":"+registry_port+"/v1/images/"+image_id+"/json")
+        r=requests.get('http://'+registry_ip+":"+registry_port+"/v1/images/"+image_id+"/json",timeout=5)
         if r.status_code==200:
             re=r.json()
             return re

@@ -10,7 +10,7 @@ def createImage(uri,name,container_format,disk_format,tokenid):
     data['name']=name
     data['container_format']=container_format
     data['disk_format']=disk_format
-    result=requests.post(url,data=json.dumps(data),headers=headers)
+    result=requests.post(url,data=json.dumps(data),headers=headers,timeout=5)
     if result.status_code in [200,201]:
         re=result.json()
         return re
@@ -30,7 +30,7 @@ def createImage(uri,name,container_format,disk_format,tokenid):
 def listImages(uri,tokenid):
     url=uri+"/v2/images"
     headers['X-Auth-Token']=tokenid
-    result=requests.get(url,headers=headers)
+    result=requests.get(url,headers=headers,timeout=5)
     if result.status_code in [200]:
         re = result.json()
         r=[]
@@ -43,7 +43,7 @@ def listImages(uri,tokenid):
 def ImageDetail(uri,imageid,tokenid):
     url=uri+"/v2/images/"+str(imageid)
     headers['X-Auth-Token']=tokenid
-    result=requests.get(url,headers=headers)
+    result=requests.get(url,headers=headers,timeout=5)
     if result.status_code in [200]:
         re = result.json()
         return re
@@ -53,7 +53,7 @@ def ImageDetail(uri,imageid,tokenid):
 def deleteImage(uri,imageid,tokenid):
     url=uri+"/v2/images/"+str(imageid)
     headers['X-Auth-Token']=tokenid
-    result=requests.delete(url,headers=headers)
+    result=requests.delete(url,headers=headers,timeout=5)
     if result.status_code in [200,202]:
         return "ok"
     else:

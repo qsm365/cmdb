@@ -7,7 +7,7 @@ headers = {'content-type':'application/json'}
 def listServers(uri,tokenid):
     url=uri+"/servers/detail"
     headers['X-Auth-Token']=tokenid
-    result=requests.get(url,headers=headers)
+    result=requests.get(url,headers=headers,timeout=5)
     if result.status_code in [200,203]:
         re = result.json()
         r=[]
@@ -27,7 +27,7 @@ def listServers(uri,tokenid):
 def serverDetail(uri,serverid,tokenid):
     url=uri+"/servers/"+str(serverid)
     headers['X-Auth-Token']=tokenid
-    result=requests.get(url,headers=headers)
+    result=requests.get(url,headers=headers,timeout=5)
     if result.status_code in [200,203]:
         re = result.json()
         return re['server']
@@ -58,7 +58,7 @@ def createServer(uri,name,flavorid,volumeid,networkid,fixip,keyname,tokenid,**ar
     server['networks']=networks
     server['key_name']=keyname
     data['server']=server
-    result=requests.post(url,data=json.dumps(data),headers=headers)
+    result=requests.post(url,data=json.dumps(data),headers=headers,timeout=5)
     if result.status_code in [200,202]:
         re=result.json()
         return re
@@ -68,7 +68,7 @@ def createServer(uri,name,flavorid,volumeid,networkid,fixip,keyname,tokenid,**ar
 def deleteServer(uri,serverid,tokenid):
     url=uri+"/servers/"+str(serverid)
     headers['X-Auth-Token']=tokenid
-    result=requests.delete(url,headers=headers)
+    result=requests.delete(url,headers=headers,timeout=5)
     if result.status_code in [200,204]:
         return "ok"
     else:
@@ -79,7 +79,7 @@ def forceDeleteServer(uri,serverid,tokenid):
     headers['X-Auth-Token']=tokenid
     data={}
     data['forceDelete']=None
-    result=requests.post(url,data=json.dumps(data),headers=headers)
+    result=requests.post(url,data=json.dumps(data),headers=headers,timeout=5)
     if result.status_code in [200,202]:
         return "ok"
     else:
@@ -90,7 +90,7 @@ def startServer(uri,serverid,tokenid):
     headers['X-Auth-Token']=tokenid
     data={}
     data['os-start']=None
-    result=requests.post(url,data=json.dumps(data),headers=headers)
+    result=requests.post(url,data=json.dumps(data),headers=headers,timeout=5)
     if result.status_code in [200,202]:
         return "ok"
     else:
@@ -101,7 +101,7 @@ def stopServer(uri,serverid,tokenid):
     headers['X-Auth-Token']=tokenid
     data={}
     data['os-stop']=None
-    result=requests.post(url,data=json.dumps(data),headers=headers)
+    result=requests.post(url,data=json.dumps(data),headers=headers,timeout=5)
     if result.status_code in [200,202]:
         return "ok"
     else:
@@ -110,7 +110,7 @@ def stopServer(uri,serverid,tokenid):
 def listFlavors(uri,tokenid):
     url=uri+"/flavors"
     headers['X-Auth-Token']=tokenid
-    result=requests.get(url,headers=headers)
+    result=requests.get(url,headers=headers,timeout=5)
     if result.status_code in [200]:
         re = result.json()
         r={}
@@ -123,7 +123,7 @@ def listFlavors(uri,tokenid):
 def flavorDetail(uri,flavorid,tokenid):
     url=uri+"/flavors/"+str(flavorid)
     headers['X-Auth-Token']=tokenid
-    result=requests.get(url,headers=headers)
+    result=requests.get(url,headers=headers,timeout=5)
     if result.status_code in [200]:
         re = result.json()
         r={}
@@ -146,7 +146,7 @@ def createFlavor(uri,name,vcpus,ram,swap,disk,tokenid):
     flavor['swap']=swap
     flavor['disk']=disk
     data['flavor']=flavor
-    result=requests.post(url,data=json.dumps(data),headers=headers)
+    result=requests.post(url,data=json.dumps(data),headers=headers,timeout=5)
     if result.status_code in [200]:
         re=result.json()
         return re['flavor']['id']
@@ -156,7 +156,7 @@ def createFlavor(uri,name,vcpus,ram,swap,disk,tokenid):
 def deleteFlavor(uri,flavorid,tokenid):
     url=uri+"/flavors/"+str(flavorid)
     headers['X-Auth-Token']=tokenid
-    result=requests.delete(url,headers=headers)
+    result=requests.delete(url,headers=headers,timeout=5)
     if result.status_code in [200]:
         return "ok"
     else:
@@ -165,7 +165,7 @@ def deleteFlavor(uri,flavorid,tokenid):
 def listKeypairs(uri,tokenid):
     url=uri+"/os-keypairs"
     headers['X-Auth-Token']=tokenid
-    result=requests.get(url,headers=headers)
+    result=requests.get(url,headers=headers,timeout=5)
     if result.status_code in [200]:
         re = result.json()
         r=[]
@@ -179,7 +179,7 @@ def listKeypairs(uri,tokenid):
 def keypairDetail(uri,name,tokenid):
     url=uri+"/os-keypairs/"+str(name)
     headers['X-Auth-Token']=tokenid
-    result=requests.get(url,headers=headers)
+    result=requests.get(url,headers=headers,timeout=5)
     if result.status_code in [200]:
         re = result.json()
         r={}
@@ -194,7 +194,7 @@ def keypairDetail(uri,name,tokenid):
 def deleteKeypair(uri,name,tokenid):
     url=uri+"/os-keypairs/"+str(name)
     headers['X-Auth-Token']=tokenid
-    result=requests.delete(url,headers=headers)
+    result=requests.delete(url,headers=headers,timeout=5)
     if result.status_code in [200]:
         return "ok"
     else:
@@ -207,7 +207,7 @@ def createKeypair(uri,name,tokenid):
     keypair={}
     keypair['name']=name
     data['keypair']=keypair
-    result=requests.post(url,data=json.dumps(data),headers=headers)
+    result=requests.post(url,data=json.dumps(data),headers=headers,timeout=5)
     if result.status_code in [200,201]:
         re = result.json()
         r={}
@@ -227,7 +227,7 @@ def importKeypair(uri,name,public_key,tokenid):
     keypair['name']=name
     keypair['public_key']=public_key
     data['keypair']=keypair
-    result=requests.post(url,data=json.dumps(data),headers=headers)
+    result=requests.post(url,data=json.dumps(data),headers=headers,timeout=5)
     if result.status_code in [200,201]:
         re = result.json()
         r={}
@@ -243,7 +243,7 @@ def reserveIp(uri,ipaddress,tokenid):
     headers['X-Auth-Token']=tokenid
     data={}
     data['reserve']=None
-    result=requests.post(url,data=json.dumps(data),headers=headers)
+    result=requests.post(url,data=json.dumps(data),headers=headers,timeout=5)
     if result.status_code in [200,202]:
         return "ok"
     else:
@@ -254,7 +254,7 @@ def unreserveIp(uri,ipaddress,tokenid):
     headers['X-Auth-Token']=tokenid
     data={}
     data['unreserve']=None
-    result=requests.post(url,data=json.dumps(data),headers=headers)
+    result=requests.post(url,data=json.dumps(data),headers=headers,timeout=5)
     if result.status_code in [200,202]:
         return "ok"
     else:
@@ -263,7 +263,7 @@ def unreserveIp(uri,ipaddress,tokenid):
 def listNetwork(uri,tokenid):
     url=uri+"/os-networks"
     headers['X-Auth-Token']=tokenid
-    result=requests.get(url,headers=headers)
+    result=requests.get(url,headers=headers,timeout=5)
     if result.status_code in [200]:
         re = result.json()
         r=[]
@@ -288,7 +288,7 @@ def listNetwork(uri,tokenid):
 def networkDetail(uri,nid,tokenid):
     url=uri+"/os-networks/"+str(nid)
     headers['X-Auth-Token']=tokenid
-    result=requests.get(url,headers=headers)
+    result=requests.get(url,headers=headers,timeout=5)
     if result.status_code in [200]:
         re = result.json()
         n = re['network']
@@ -311,7 +311,7 @@ def networkDetail(uri,nid,tokenid):
 def deleteNetwork(uri,nid,tokenid):
     url=uri+"/os-networks/"+str(nid)
     headers['X-Auth-Token']=tokenid
-    result=requests.delete(url,headers=headers)
+    result=requests.delete(url,headers=headers,timeout=5)
     if result.status_code in [200,202]:
         return "ok"
     else:
@@ -325,7 +325,7 @@ def createNetwork(uri,label,cidr,tokenid,**args):
     network['label']=label
     network['cidr']=cidr
     data['network']=network
-    result=requests.post(url,data=json.dumps(data),headers=headers)
+    result=requests.post(url,data=json.dumps(data),headers=headers,timeout=5)
     if result.status_code in [200,202]:
         re=result.json()
         return re

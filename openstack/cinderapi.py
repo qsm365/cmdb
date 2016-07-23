@@ -11,7 +11,7 @@ def createVolume(uri,name,size,tokenid,**args):
     volume['name']=name
     volume['size']=size
     data['volume']=volume
-    result=requests.post(url,data=json.dumps(data),headers=headers)
+    result=requests.post(url,data=json.dumps(data),headers=headers,timeout=5)
     if result.status_code in [200,202]:
         re=result.json()
         return re
@@ -21,7 +21,7 @@ def createVolume(uri,name,size,tokenid,**args):
 def listVolumes(uri,tokenid):
     url=uri+"/volumes/detail"
     headers['X-Auth-Token']=tokenid
-    result=requests.get(url,headers=headers)
+    result=requests.get(url,headers=headers,timeout=5)
     if result.status_code in [200]:
         re = result.json()
         r=[]
@@ -34,7 +34,7 @@ def listVolumes(uri,tokenid):
 def volumeDetail(uri,volumeid,tokenid):
     url=uri+"/volumes/"+str(volumeid)
     headers['X-Auth-Token']=tokenid
-    result=requests.get(url,headers=headers)
+    result=requests.get(url,headers=headers,timeout=5)
     if result.status_code in [200]:
         re = result.json()
         return re['volume']
@@ -44,7 +44,7 @@ def volumeDetail(uri,volumeid,tokenid):
 def deleteVolume(uri,volumeid,tokenid):
     url=uri+"/volumes/"+str(volumeid)
     headers['X-Auth-Token']=tokenid
-    result=requests.delete(url,headers=headers)
+    result=requests.delete(url,headers=headers,timeout=5)
     if result.status_code in [200,202]:
         return "ok"
     else:
